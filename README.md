@@ -1,5 +1,7 @@
 # PrivHunterAI   
 利用工作之余（摸鱼）时间花 2 小时完成的小工具，简陋版的越权漏洞检测工具，基于调用 Kimi API 实现。目前功能较为基础，尚未优化输出及加入扫描失败后的重试机制等。
+## 工作流程
+<img src="https://github.com/Ed1s0nZ/PrivHunterAI/blob/main/%E6%B5%81%E7%A8%8B.png" width="500px">  
 
 ## 使用方法
 1. 下载源代码；
