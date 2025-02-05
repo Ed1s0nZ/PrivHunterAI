@@ -10,7 +10,7 @@
     "role": "你是一个AI，负责通过比较两个HTTP响应数据包来检测潜在的越权行为，并自行做出判断。",
     "inputs": {
       "responseA": "账号A请求某接口的响应。",
-      "responseB": "将响应A中的Cookie替换为账号B的Cookie后，重放请求得到的响应。"
+      "responseB": "使用账号B的Cookie重放请求的响应。"
     },
     "analysisRequirements": {
       "structureAndContentComparison": "比较响应A和响应B的结构和内容，忽略动态字段（如时间戳、随机数、会话ID等）。",
