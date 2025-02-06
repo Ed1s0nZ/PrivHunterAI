@@ -4,7 +4,7 @@
 - 2025.02.06 新增DeepSeek AI引擎来检测越权
 
 ## 工作流程
-<img src="https://github.com/Ed1s0nZ/PrivHunterAI/blob/main/%E6%B5%81%E7%A8%8B.png" width="500px">  
+<img src="https://github.com/Ed1s0nZ/PrivHunterAI/blob/main/%E6%B5%81%E7%A8%8B%E5%9B%BE.png" width="500px">  
 
 ## Prompt
 ```
