@@ -77,7 +77,7 @@ func sendHTTPAndKimi(r *RequestResponseLog) {
 			log.Println("kimi:")
 			log.Println(result)
 		case "deepseek":
-			result, err := deepSeek(resp1, resp2) //调用kimi检测是否越权
+			result, err := deepSeek(resp1, resp2) //调用deepSeek检测是否越权
 			if err != nil {
 				fmt.Println(err)
 			}
