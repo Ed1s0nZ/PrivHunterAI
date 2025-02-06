@@ -68,31 +68,33 @@ func sendHTTPAndKimi(r *RequestResponseLog) {
 		// 输出响应体字符串
 		fmt.Println("Response1 Body:", resp1)
 		fmt.Println("Response2 Body:", resp2)
-		switch AI {
-		case "kimi":
-			result, err := kimi(resp1, resp2) //调用kimi检测是否越权
-			if err != nil {
-				fmt.Println(err)
-			}
-			log.Println("kimi:")
-			log.Println(result)
-		case "deepseek":
-			result, err := deepSeek(resp1, resp2) //调用deepSeek检测是否越权
-			if err != nil {
-				fmt.Println(err)
-			}
-			log.Println("deepseek:")
-			log.Println(result)
-		default:
-			result, err := kimi(resp1, resp2) //调用kimi检测是否越权
-			if err != nil {
-				fmt.Println(err)
-			}
-			log.Println("kimi:")
-			log.Println(result)
+		result, err := detectPrivilegeEscalation(AI, resp1, resp2)
+		if err != nil {
+			fmt.Println("Error:", err)
+		} else {
+			log.Println("Result:", result)
 		}
 	}
 
+}
+
+func detectPrivilegeEscalation(AI string, resp1, resp2 string) (string, error) {
+	var result string
+	var err error
+
+	switch AI {
+	case "kimi":
+		result, err = kimi(resp1, resp2) // 调用 kimi 检测是否越权
+	case "deepseek":
+		result, err = deepSeek(resp1, resp2) // 调用 deepSeek 检测是否越权
+	default:
+		result, err = kimi(resp1, resp2) // 默认调用 kimi 检测是否越权
+	}
+
+	if err != nil {
+		return "", err
+	}
+	return result, nil
 }
 
 func isNotSuffix(s string, suffixes []string) bool {
