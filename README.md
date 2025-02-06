@@ -48,7 +48,7 @@
 
 ## 使用方法
 1. 下载源代码；
-2. 编辑`config.go`文件，配置`apiKey`（Kimi的API秘钥） 和`cookie2`（响应2对应的cookie），可按需配置`suffixes`（接口后缀白名单，如.js）；
+2. 编辑`config.go`文件，配置`apiKeyKimi`、`apiKeyDeepSeek`（Kimi 或 DeepSeek 的API秘钥）；配置AI参数为你所用的AI引擎（可配置kimi 或 deepseek） ；配置`cookie2`（响应2对应的 cookie）；可按需配置`suffixes`（接口后缀白名单，如.js）；
 3. `go build`编译项目，并运行二进制文件；
 4. BurpSuite 挂下级代理 `127.0.0.1:9080`（端口可在`mitmproxy.go` 的`Addr:":9080",` 中配置）即可开始扫描。   
 
