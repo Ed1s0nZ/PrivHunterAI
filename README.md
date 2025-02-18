@@ -57,8 +57,10 @@
 3. `go build`编译项目，并运行二进制文件；
 4. BurpSuite 挂下级代理 `127.0.0.1:9080`（端口可在`mitmproxy.go` 的`Addr:":9080",` 中配置）即可开始扫描。   
 
-## 效果
+## 输出效果
+持续优化中，目前输出效果如下：
 ```
+./yuequanScan
 INFO[0000] Proxy start listen at :9080                  
 Response1 Body: {"code":"0000","data":{"testkey1":"0.00%","testkey2":"0.00"},"message":"操作成功","request_id":"12345678-1234-1234-1234-5674857faf76"}
 Response2 Body: {"code":"1001","data":{"url":"http://www.ceshi.com/api?id=1"},"message":"获取用户名失败","request_id":"12345678-1234-1234-1234-5674857faf76"}
