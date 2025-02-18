@@ -107,11 +107,11 @@ func detectPrivilegeEscalation(AI string, resp1, resp2 string) (string, error) {
 
 	switch AI {
 	case "kimi":
-		result, err = Kimi(resp1, resp2) // 调用 kimi 检测是否越权
+		result, err = kimi(resp1, resp2) // 调用 kimi 检测是否越权
 	case "deepseek":
-		result, err = DeepSeek(resp1, resp2) // 调用 deepSeek 检测是否越权
+		result, err = deepSeek(resp1, resp2) // 调用 deepSeek 检测是否越权
 	default:
-		result, err = Kimi(resp1, resp2) // 默认调用 kimi 检测是否越权
+		result, err = kimi(resp1, resp2) // 默认调用 kimi 检测是否越权
 	}
 
 	if err != nil {
