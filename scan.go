@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
@@ -9,6 +10,12 @@ import (
 	"strings"
 	"time"
 )
+
+type Result struct {
+	Host   string `json:"host"` // JSON 标签用于自定义字段名
+	Path   string `json:"path"`
+	Result string `json:"result"`
+}
 
 func scan() {
 	for {
@@ -24,16 +31,30 @@ func scan() {
 
 			// fmt.Println(r)
 			if r.Request.Header != nil && r.Response.Header != nil {
-				sendHTTPAndKimi(r) // 主要
-				logs.Delete(key)
-				return true // 返回true继续遍历，返回false停止遍历
+
+				result, err := sendHTTPAndKimi(r) // 主要
+				if err != nil {
+					fmt.Println(err)
+				} else {
+					var resultOutput Result
+					resultOutput.Host = r.Request.URL.Host
+					resultOutput.Path = r.Request.URL.Path
+					resultOutput.Result = result
+					jsonData, err := json.Marshal(resultOutput)
+					if err != nil {
+						log.Fatalf("Error marshaling to JSON: %v", err)
+					}
+					logs.Delete(key)
+					fmt.Println(string(jsonData))
+					return true // 返回true继续遍历，返回false停止遍历
+				}
 			}
 			return true
 		})
 	}
 }
 
-func sendHTTPAndKimi(r *RequestResponseLog) {
+func sendHTTPAndKimi(r *RequestResponseLog) (string, error) {
 	resp1 := string(r.Response.Body)
 
 	fullURL := &url.URL{
@@ -47,7 +68,7 @@ func sendHTTPAndKimi(r *RequestResponseLog) {
 		req, err := http.NewRequest(r.Request.Method, fullURL.String(), strings.NewReader(string(r.Request.Body)))
 		if err != nil {
 			fmt.Println("创建请求失败:", err)
-			return
+			return "", err
 		}
 		req.Header = r.Request.Header
 		req.Header.Set("Cookie", cookie2)
@@ -55,13 +76,13 @@ func sendHTTPAndKimi(r *RequestResponseLog) {
 		resp, err := client.Do(req)
 		if err != nil {
 			fmt.Println("请求失败:", err)
-			return
+			return "", err
 		}
 		defer resp.Body.Close()
 		bodyBytes, err := io.ReadAll(resp.Body)
 		if err != nil {
 			fmt.Println("Error reading response body:", err)
-			return
+			return "", err
 		}
 		// 将响应体转换为字符串
 		resp2 := string(bodyBytes)
@@ -71,11 +92,13 @@ func sendHTTPAndKimi(r *RequestResponseLog) {
 		result, err := detectPrivilegeEscalation(AI, resp1, resp2)
 		if err != nil {
 			fmt.Println("Error:", err)
-		} else {
-			log.Println("Result:", result)
+			return "", err
 		}
-	}
+		// log.Println("Result:", result)
+		return result, nil
 
+	}
+	return "白名单后缀接口", nil
 }
 
 func detectPrivilegeEscalation(AI string, resp1, resp2 string) (string, error) {
@@ -84,11 +107,11 @@ func detectPrivilegeEscalation(AI string, resp1, resp2 string) (string, error) {
 
 	switch AI {
 	case "kimi":
-		result, err = kimi(resp1, resp2) // 调用 kimi 检测是否越权
+		result, err = Kimi(resp1, resp2) // 调用 kimi 检测是否越权
 	case "deepseek":
-		result, err = deepSeek(resp1, resp2) // 调用 deepSeek 检测是否越权
+		result, err = DeepSeek(resp1, resp2) // 调用 deepSeek 检测是否越权
 	default:
-		result, err = kimi(resp1, resp2) // 默认调用 kimi 检测是否越权
+		result, err = Kimi(resp1, resp2) // 默认调用 kimi 检测是否越权
 	}
 
 	if err != nil {
