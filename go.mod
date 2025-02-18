@@ -1,4 +1,4 @@
-module yuequanScanKimi
+module yuequanScan
 
 go 1.22
 
