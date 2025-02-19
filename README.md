@@ -1,6 +1,6 @@
 # PrivHunterAI   
 简易版支持通过被动代理调用 KIMI AI 和 DeepSeek AI 进行越权漏洞检测，检测能力依赖 KIMI API 和 DeepSeek API实现。
-# 时间线
+## 时间线
 - 2025.02.06
   1. 新增DeepSeek AI引擎来检测越权；
   2. 优化流程图。
