@@ -12,9 +12,12 @@ import (
 )
 
 type Result struct {
-	Host   string `json:"host"` // JSON 标签用于自定义字段名
-	Path   string `json:"path"`
-	Result string `json:"result"`
+	Method    string `json:"method"`
+	Host      string `json:"host"` // JSON 标签用于自定义字段名
+	Path      string `json:"path"`
+	RespBodyA string `json:"respBodyA"`
+	RespBodyB string `json:"respBodyB"`
+	Result    string `json:"result"`
 }
 
 func scan() {
@@ -30,31 +33,36 @@ func scan() {
 			}
 
 			// fmt.Println(r)
-			if r.Request.Header != nil && r.Response.Header != nil {
-
-				result, err := sendHTTPAndKimi(r) // 主要
+			if r.Request.Header != nil && r.Response.Header != nil && r.Response.Body != nil {
+				result, resp1, resp2, err := sendHTTPAndKimi(r) // 主要
 				if err != nil {
 					fmt.Println(err)
 				} else {
 					var resultOutput Result
+					resultOutput.Method = r.Request.Method
 					resultOutput.Host = r.Request.URL.Host
 					resultOutput.Path = r.Request.URL.Path
+					resultOutput.RespBodyA = resp1
+					resultOutput.RespBodyB = resp2
 					resultOutput.Result = result
 					jsonData, err := json.Marshal(resultOutput)
 					if err != nil {
 						log.Fatalf("Error marshaling to JSON: %v", err)
 					}
+					log.Println(string(jsonData))
 					logs.Delete(key)
-					fmt.Println(string(jsonData))
 					return true // 返回true继续遍历，返回false停止遍历
 				}
+			} else {
+				// logs.Delete(key) // 不可以添加logs.Delete(key)
+				return true
 			}
 			return true
 		})
 	}
 }
 
-func sendHTTPAndKimi(r *RequestResponseLog) (string, error) {
+func sendHTTPAndKimi(r *RequestResponseLog) (result string, respA string, respB string, err error) {
 	resp1 := string(r.Response.Body)
 
 	fullURL := &url.URL{
@@ -63,12 +71,12 @@ func sendHTTPAndKimi(r *RequestResponseLog) (string, error) {
 		Path:     r.Request.URL.Path,
 		RawQuery: r.Request.URL.RawQuery,
 	}
-	// fmt.Println(fullURL.String())
-	if isNotSuffix(fullURL.String(), suffixes) {
+
+	if isNotSuffix(r.Request.URL.Path, suffixes) && !containsString(r.Response.Header.Get("Content-Type"), allowedRespHeaders) {
 		req, err := http.NewRequest(r.Request.Method, fullURL.String(), strings.NewReader(string(r.Request.Body)))
 		if err != nil {
 			fmt.Println("创建请求失败:", err)
-			return "", err
+			return "", "", "", err
 		}
 		req.Header = r.Request.Header
 		req.Header.Set("Cookie", cookie2)
@@ -76,29 +84,34 @@ func sendHTTPAndKimi(r *RequestResponseLog) (string, error) {
 		resp, err := client.Do(req)
 		if err != nil {
 			fmt.Println("请求失败:", err)
-			return "", err
+			return "", "", "", err
 		}
 		defer resp.Body.Close()
 		bodyBytes, err := io.ReadAll(resp.Body)
 		if err != nil {
 			fmt.Println("Error reading response body:", err)
-			return "", err
+			return "", "", "", err
 		}
 		// 将响应体转换为字符串
 		resp2 := string(bodyBytes)
 		// 输出响应体字符串
-		fmt.Println("Response1 Body:", resp1)
-		fmt.Println("Response2 Body:", resp2)
-		result, err := detectPrivilegeEscalation(AI, resp1, resp2)
-		if err != nil {
-			fmt.Println("Error:", err)
-			return "", err
+		// fmt.Println("Response1 Body:", resp1)
+		// fmt.Println("Response2 Body:", resp2)
+		if len(resp1+resp2) < 65535 {
+			result, err := detectPrivilegeEscalation(AI, resp1, resp2)
+			if err != nil {
+				fmt.Println("Error:", err)
+				return "", "", "", err
+			}
+			return result, resp1, resp2, nil
+		} else {
+			return "请求包太大", resp1, resp2, nil
 		}
+
 		// log.Println("Result:", result)
-		return result, nil
 
 	}
-	return "白名单后缀接口", nil
+	return "白名单后缀或白名单Content-Type接口", resp1, "", nil
 }
 
 func detectPrivilegeEscalation(AI string, resp1, resp2 string) (string, error) {
@@ -127,4 +140,16 @@ func isNotSuffix(s string, suffixes []string) bool {
 		}
 	}
 	return true
+}
+
+// 扫描白名单
+func containsString(target string, slice []string) bool {
+	for _, s := range slice {
+		if strings.Contains(strings.ToLower(target), strings.ToLower(s)) {
+			// log.Println(target)
+			return true
+		}
+	}
+
+	return false
 }
