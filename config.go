@@ -31,3 +31,14 @@ var suffixes = []string{
 	// 特殊用途文件
 	".gitignore", ".lock", ".bak",
 } //这些后缀不扫
+
+var allowedRespHeaders = []string{
+	"image/png",
+	"text/html",
+	"application/pdf",
+	"text/css",
+	"audio/mpeg",
+	"audio/wav",
+	"video/mp4",
+	"application/grpc",
+} // 这些响应头不扫
