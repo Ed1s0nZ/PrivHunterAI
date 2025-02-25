@@ -1,5 +1,5 @@
 # PrivHunterAI   
-本工具通过被动代理方式调用Kimi AI和DeepSeek AI进行越权漏洞检测，检测能力基于Kimi API和DeepSeek API实现，支持HTTPS协议。
+本工具通过被动代理方式调用Kimi、DeepSeek、通义千问AI进行越权漏洞检测，检测能力基于Kimi API和DeepSeek API实现，支持HTTPS协议。
 ## 时间线
 - 2025.02.06
   1. 新增DeepSeek AI引擎来检测越权；
@@ -10,7 +10,8 @@
   3. 增加响应Content-Type白名单，静态文件不扫描；
   4. 限制每次扫描向AI请求的最大字节，避免因请求包过大导致扫描失败。
 - 2025.02.25
-  1. 优化文件目录结构，优化终端输出。
+  1. 优化文件目录结构，优化终端输出；
+  2. 新增通义千问 AI引擎来检测越权。
 
 ## 工作流程
 <img src="https://github.com/Ed1s0nZ/PrivHunterAI/blob/main/%E6%B5%81%E7%A8%8B%E5%9B%BE.png" width="800px">  
