@@ -1,8 +1,8 @@
 package main
 
 const (
-	AI             = "deepseek"   // 可选择deepseek或kimi
-	cookie2        = "cookie2"
+	AI      = "qianwen" // 可选择deepseek、kimi、qianwen
+	cookie2 = "cookie2"
 )
 
 var suffixes = []string{
