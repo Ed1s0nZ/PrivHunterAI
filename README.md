@@ -66,6 +66,7 @@
 ## 输出效果
 持续优化中，目前输出效果如下：
 <img src="https://github.com/Ed1s0nZ/PrivHunterAI/blob/main/%E6%95%88%E6%9E%9C.png" width="800px">  
+<img src="https://github.com/Ed1s0nZ/PrivHunterAI/blob/main/%E6%95%88%E6%9E%9C2.png" width="800px">  
 
 
 # 注意
