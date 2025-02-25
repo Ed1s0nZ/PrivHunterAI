@@ -1,5 +1,5 @@
 # PrivHunterAI   
-本工具通过被动代理方式调用Kimi、DeepSeek、通义千问AI进行越权漏洞检测，检测能力基于Kimi API和DeepSeek API实现，支持HTTPS协议。
+本工具通过被动代理方式调用Kimi、DeepSeek 和 通义千问 AI 进行越权漏洞检测，检测能力基于对应AI引擎的API实现，支持HTTPS协议。
 ## 时间线
 - 2025.02.06
   1. 新增DeepSeek AI引擎来检测越权；
