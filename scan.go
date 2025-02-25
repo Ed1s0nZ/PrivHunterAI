@@ -124,7 +124,7 @@ func sendHTTPAndKimi(r *RequestResponseLog) (result string, respA string, respB 
 		// fmt.Println("Response1 Body:", resp1)
 		// fmt.Println("Response2 Body:", resp2)
 		if len(resp1+resp2) < 65535 {
-			result, err := detectPrivilegeEscalation(AI, resp1, resp2)
+			result, err := detectPrivilegeEscalation(AI, r.Request.URL.Path, resp1, resp2)
 			if err != nil {
 				fmt.Println("Error:", err)
 				return "", "", "", err
@@ -140,19 +140,19 @@ func sendHTTPAndKimi(r *RequestResponseLog) (result string, respA string, respB 
 	return `{"res": "white", "reason": "白名单后缀或白名单Content-Type接口"}`, resp1, "", nil
 }
 
-func detectPrivilegeEscalation(AI string, resp1, resp2 string) (string, error) {
+func detectPrivilegeEscalation(AI string, path, resp1, resp2 string) (string, error) {
 	var result string
 	var err error
 
 	switch AI {
 	case "kimi":
-		result, err = aiapis.Kimi(resp1, resp2) // 调用 kimi 检测是否越权
+		result, err = aiapis.Kimi(path, resp1, resp2) // 调用 kimi 检测是否越权
 	case "deepseek":
-		result, err = aiapis.DeepSeek(resp1, resp2) // 调用 deepSeek 检测是否越权
+		result, err = aiapis.DeepSeek(path, resp1, resp2) // 调用 deepSeek 检测是否越权
 	case "qianwen":
-		result, err = aiapis.Qianwen(resp1, resp2) // 调用 qianwen 检测是否越权
+		result, err = aiapis.Qianwen(path, resp1, resp2) // 调用 qianwen 检测是否越权
 	default:
-		result, err = aiapis.Kimi(resp1, resp2) // 默认调用 kimi 检测是否越权
+		result, err = aiapis.Kimi(path, resp1, resp2) // 默认调用 kimi 检测是否越权
 	}
 
 	if err != nil {
