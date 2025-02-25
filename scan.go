@@ -149,6 +149,8 @@ func detectPrivilegeEscalation(AI string, resp1, resp2 string) (string, error) {
 		result, err = aiapis.Kimi(resp1, resp2) // 调用 kimi 检测是否越权
 	case "deepseek":
 		result, err = aiapis.DeepSeek(resp1, resp2) // 调用 deepSeek 检测是否越权
+	case "qianwen":
+		result, err = aiapis.Qianwen(resp1, resp2) // 调用 qianwen 检测是否越权
 	default:
 		result, err = aiapis.Kimi(resp1, resp2) // 默认调用 kimi 检测是否越权
 	}
