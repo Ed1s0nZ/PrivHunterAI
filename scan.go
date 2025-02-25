@@ -19,6 +19,13 @@ type Result struct {
 	RespBodyA string `json:"respBodyA"`
 	RespBodyB string `json:"respBodyB"`
 	Result    string `json:"result"`
+	Reason    string `json:"reason"`
+}
+
+// 扫描结果
+type ScanResult struct {
+	Res    string `json:"res"`
+	Reason string `json:"reason"`
 }
 
 func scan() {
@@ -45,14 +52,32 @@ func scan() {
 					resultOutput.Path = r.Request.URL.Path
 					resultOutput.RespBodyA = resp1
 					resultOutput.RespBodyB = resp2
-					resultOutput.Result = result
-					jsonData, err := json.Marshal(resultOutput)
+					//
+
+					result1, err := parseResponse(result)
 					if err != nil {
-						log.Fatalf("Error marshaling to JSON: %v", err)
+						log.Fatalf("解析失败: %v", err)
 					}
-					log.Println(string(jsonData))
-					logs.Delete(key)
-					return true // 返回true继续遍历，返回false停止遍历
+
+					var scanR ScanResult
+
+					err = json.Unmarshal([]byte(result1), &scanR)
+					if err != nil {
+						log.Println("解析 JSON 数据失败("+result+": )", err)
+					} else {
+						// fmt.Printf("Res: %s\n", scanR.Res)
+						// fmt.Printf("Reason: %s\n", scanR.Reason)
+						resultOutput.Result = scanR.Res
+						resultOutput.Reason = scanR.Reason
+						jsonData, err := json.Marshal(resultOutput)
+						if err != nil {
+							log.Fatalf("Error marshaling to JSON: %v", err)
+						}
+						log.Println(string(jsonData))
+						fmt.Println(PrintYuequan(resultOutput.Result, resultOutput.Method, resultOutput.Host+resultOutput.Path, resultOutput.Reason))
+						logs.Delete(key)
+						return true // 返回true继续遍历，返回false停止遍历
+					}
 				}
 			} else {
 				// logs.Delete(key) // 不可以添加logs.Delete(key)
@@ -106,13 +131,13 @@ func sendHTTPAndKimi(r *RequestResponseLog) (result string, respA string, respB 
 			}
 			return result, resp1, resp2, nil
 		} else {
-			return "请求包太大", resp1, resp2, nil
+			return `{"res": "white", "reason": "请求包太大"}`, resp1, resp2, nil
 		}
 
 		// log.Println("Result:", result)
 
 	}
-	return "白名单后缀或白名单Content-Type接口", resp1, "", nil
+	return `{"res": "white", "reason": "白名单后缀或白名单Content-Type接口"}`, resp1, "", nil
 }
 
 func detectPrivilegeEscalation(AI string, resp1, resp2 string) (string, error) {
@@ -132,25 +157,4 @@ func detectPrivilegeEscalation(AI string, resp1, resp2 string) (string, error) {
 		return "", err
 	}
 	return result, nil
-}
-
-func isNotSuffix(s string, suffixes []string) bool {
-	for _, suffix := range suffixes {
-		if strings.HasSuffix(s, suffix) {
-			return false
-		}
-	}
-	return true
-}
-
-// 扫描白名单
-func containsString(target string, slice []string) bool {
-	for _, s := range slice {
-		if strings.Contains(strings.ToLower(target), strings.ToLower(s)) {
-			// log.Println(target)
-			return true
-		}
-	}
-
-	return false
 }
