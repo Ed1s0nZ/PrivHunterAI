@@ -62,21 +62,7 @@
 
 ## 输出效果
 持续优化中，目前输出效果如下：
-```
-./yuequanScan
-INFO[0000] Proxy start listen at :9080                  
-Response1 Body: {"code":"0000","data":{"testkey1":"0.00%","testkey2":"0.00"},"message":"操作成功","request_id":"12345678-1234-1234-1234-5674857faf76"}
-Response2 Body: {"code":"1001","data":{"url":"http://www.ceshi.com/api?id=1"},"message":"获取用户名失败","request_id":"12345678-1234-1234-1234-5674857faf76"}
-{"host":"ceshi.com","path":"/api/test/v1/xxx/yyy/zzz","result":"{\"res\": \"false\", \"reason\": \"响应B错误信息明显\"}"}
-
-Response1 Body: {"code":"0000","data":{"testkey1":"0.00%","testkey2":"0.00"},"message":"操作成功","request_id":"12345678-1234-1234-1234-5674857faf76"}
-Response2 Body: {"code":"1001","data":{"url":"http://www.ceshi.com/api?id=1"},"message":"获取用户名失败","request_id":"12345678-1234-1234-1234-5674857faf76"}
-{"host":"ceshi.com","path":"/api/test/v1/xxx/yyy/zzz","result":"```json\n{\n  \"res\": \"false\",\n  \"reason\": \"响应B含错误信息\"\n}\n```"}
-
-Response1 Body: {"code":"0000","data":{"testkey1":"0.00%","testkey2":"0.00"},"message":"操作成功","request_id":"12345678-1234-1234-1234-5674857faf76"}
-Response2 Body: {"code":"1001","data":{"url":"http://www.ceshi.com/api?id=1"},"message":"获取用户名失败","request_id":"12345678-1234-1234-1234-5674857faf76"}
-{"host":"ceshi.com","path":"/api/test/v1/xxx/yyy/zzz","result":"```json\n{\n  \"res\": \"false\",\n  \"reason\": \"响应内容不一致\"\n}\n```"}
-```
+<img src="https://github.com/Ed1s0nZ/PrivHunterAI/blob/main/%E6%95%88%E6%9E%9C.png" width="800px">  
 
 
 # 注意
