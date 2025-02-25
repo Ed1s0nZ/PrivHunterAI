@@ -9,6 +9,8 @@
   2. 增加扫描失败重试机制，避免出现漏扫；
   3. 增加响应Content-Type白名单，静态文件不扫描；
   4. 限制每次扫描向AI请求的最大字节，避免因请求包过大导致扫描失败。
+- 2025.02.25
+  1. 优化文件目录结构，优化终端输出。
 
 ## 工作流程
 <img src="https://github.com/Ed1s0nZ/PrivHunterAI/blob/main/%E6%B5%81%E7%A8%8B%E5%9B%BE.png" width="800px">  
@@ -55,8 +57,8 @@
 
 ## 使用方法
 1. 下载源代码；
-2. 编辑`config.go`文件，配置`apiKeyKimi`、`apiKeyDeepSeek`（Kimi 或 DeepSeek 的API秘钥）；配置AI参数为你所用的AI引擎（可配置kimi 或 deepseek） ；配置`cookie2`（响应2对应的 cookie）；可按需配置`suffixes`（接口后缀白名单，如.js）；
-3. `go build`编译项目，并运行二进制文件；
+2. 编AIAPIS目录下的`config.go`文件，配置`apiKeyKimi`、`apiKeyDeepSeek`（Kimi 或 DeepSeek 的API秘钥）；编辑跟目录下的`config.go`配置AI参数为你所用的AI引擎（可配置kimi 或 deepseek） ；配置`cookie2`（响应2对应的 cookie）；可按需配置`suffixes`（接口后缀白名单，如.js）；
+3. 执行`go build`编译项目，并运行二进制文件；
 4. 首次启动后需安装证书以解析 HTTPS 流量，证书会在首次启动命令后自动生成，路径为 ~/.mitmproxy/mitmproxy-ca-cert.pem。安装步骤可参考 Python mitmproxy 文档：[About Certificates](https://docs.mitmproxy.org/stable/concepts-certificates/)。
 5. BurpSuite 挂下级代理 `127.0.0.1:9080`（端口可在`mitmproxy.go` 的`Addr:":9080",` 中配置）即可开始扫描。   
 
