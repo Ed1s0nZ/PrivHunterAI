@@ -19,13 +19,13 @@ const (
 func PrintYuequan(yuequan string, method string, url string, reason string) string {
 	switch yuequan {
 	case "true":
-		return fmt.Sprintf("%s[*] %s %s %s  %s 原因:%s %s%s%s\n", colorRed, colorReset, method, url, colorCyan, reason, colorRed, "[可能存在越权/未授权漏洞]", colorReset)
+		return fmt.Sprintf("%s[+] %s %s %s  %s 原因:%s %s%s%s\n", colorRed, colorReset, method, url, colorCyan, reason, colorRed, "[可能存在越权/未授权漏洞]", colorReset)
 	case "false":
-		return fmt.Sprintf("%s[*] %s %s %s  %s 原因:%s %s%s%s\n", colorGreen, colorReset, method, url, colorCyan, reason, colorGreen, "[不存在越权/未授权漏洞]", colorReset)
+		return fmt.Sprintf("%s[-] %s %s %s  %s 原因:%s %s%s%s\n", colorGreen, colorReset, method, url, colorCyan, reason, colorGreen, "[不存在越权/未授权漏洞]", colorReset)
 	case "unknown":
 		return fmt.Sprintf("%s[*] %s %s %s  %s 原因:%s %s%s%s\n", colorYellow, colorReset, method, url, colorCyan, reason, colorYellow, "[不确定是否存在漏洞]", colorReset)
 	default:
-		return fmt.Sprintf("%s[*] %s %s %s  %s 原因:%s %s%s%s\n", colorBlue, colorReset, method, url, colorCyan, reason, colorBlue, "[未进行扫描]", colorReset)
+		return fmt.Sprintf("%s[-] %s %s %s  %s 原因:%s %s%s%s\n", colorBlue, colorReset, method, url, colorCyan, reason, colorBlue, "[未进行扫描]", colorReset)
 	}
 }
 
