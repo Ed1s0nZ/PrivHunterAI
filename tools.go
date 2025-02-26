@@ -70,3 +70,24 @@ func containsString(target string, slice []string) bool {
 
 	return false
 }
+
+// 字符串大于600 会被截断
+func TruncateString(s string) string {
+	// 将字符串转换为 rune 切片
+	runeSlice := []rune(s)
+
+	// 获取 rune 切片的长度
+	length := len(runeSlice)
+
+	// 如果长度小于或等于600 runes，直接返回原字符串
+	if length <= 600 {
+		return s
+	}
+
+	// 截取前300 runes 和后300 runes
+	start := runeSlice[:300]
+	end := runeSlice[length-300:]
+
+	// 将截取的部分和省略号拼接起来
+	return fmt.Sprintf("%s...%s", string(start), string(end))
+}
