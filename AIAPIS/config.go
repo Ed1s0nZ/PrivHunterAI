@@ -21,7 +21,7 @@ const (
     "outputFormat": {
       "json": {
         "res": "\"true\", \"false\" 或 \"unknown\"",
-        "reason": "简洁的判断原因，总体不超过50字，可以标注越权的概率有多大。"
+        "reason": "清晰的判断原因，总体不超过50字。"
       }
     },
     "notes": [
