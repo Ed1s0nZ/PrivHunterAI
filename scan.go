@@ -41,7 +41,7 @@ func scan() {
 			}
 
 			// fmt.Println(r)
-			if r.Request.Header != nil && r.Response.Header != nil && r.Response.Body != nil {
+			if r.Request.Header != nil && r.Response.Header != nil && r.Response.Body != nil && r.Response.StatusCode == 200 {
 				result, resp1, resp2, err := sendHTTPAndKimi(r) // 主要
 				if err != nil {
 					fmt.Println(err)
