@@ -8,79 +8,206 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            padding: 20px;
-            background-color: #f8f9fa;
+            padding: 3rem;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            font-family: 'Roboto', sans-serif;
+            overflow-x: hidden; /* 禁止横向滑动 */
         }
+
         .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 3rem;
+            border-radius: 1rem;
+            box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
         }
-        .table-responsive {
-            overflow-x: auto; /* 添加水平滚动条 */
+
+        .container:hover {
+            transform: translateY(-0.2rem);
         }
-        table {
-            width: 100%;
-            margin-top: 20px;
-        }
-        th, td {
-            text-align: center;
-            max-width: 200px; /* 限制单元格宽度 */
-            word-wrap: break-word; /* 允许内容换行 */
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        .btn {
-            margin-right: 10px;
-        }
-        /* 折叠长文本的样式 */
-        .ellipsis {
-            cursor: pointer;
-            color: #007bff;
-            text-decoration: underline;
-        }
-        /* Logo 样式 */
+
         .logo-container {
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 20px;
+            margin-bottom: 2rem;
         }
+
         .shield {
             position: relative;
-            width: 80px;
-            height: 100px;
+            width: 120px;
+            height: 160px;
             background: linear-gradient(145deg, #4a90e2, #1f78d1);
             clip-path: polygon(50% 100%, 100% 75%, 100% 15%, 50% 0%, 0% 15%, 0% 75%);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.1);
+            animation: glow 3s ease-in-out infinite;
         }
-        .magnifying-glass {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 35px;
-            height: 35px;
-            border: 4px solid #fff;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.8);
+
+        @keyframes glow {
+            0%, 100% {
+                box-shadow: 0 0.4rem 0.8rem rgba(255, 165, 0, 0.08);
+            }
+            50% {
+                box-shadow: 0 0.4rem 0.8rem rgba(255, 165, 0, 0.2);
+            }
         }
+
         .ai {
             position: absolute;
-            top: 25%;
+            top: 20%;
             left: 50%;
             transform: translate(-50%, -50%);
             font-weight: bold;
-            font-size: 14px;
-            color: #fff;
+            font-size: 1.8rem;
+            text-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.1);
+            color: white;
         }
+
+        .magnifying-glass {
+            position: absolute;
+            bottom: 4rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 5rem;
+            height: 5rem;
+            border: 0.5rem solid #fff;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.3));
+        }
+
         .logo-text {
-            margin-left: 15px;
-            font-size: 24px;
+            font-size: 3rem;
             font-weight: bold;
             color: #333;
+            margin-left: 2rem;
+            text-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            margin-right: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #66bb6a, #26a69a);
+            border-radius: 0.5rem;
+            box-shadow: 0 0.3rem 0.6rem rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-success {
+            background: linear-gradient(45deg, #00e0ff, #005691);
+            border-radius: 0.5rem;
+            box-shadow: 0 0.3rem 0.6rem rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-success:hover {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+
+        .form-control {
+            border: none;
+            border-bottom: 0.15rem solid #66bb6a;
+            border-radius: 0;
+            padding: 0.5rem 1rem;
+            background: transparent;
+        }
+
+        .form-control:focus {
+            border-bottom-color: #26a69a;
+            box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
+            outline: none;
+        }
+
+        .input-group-append button {
+            background: linear-gradient(45deg, #00e0ff, #005691);
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1.5rem;
+            color: white;
+            box-shadow: 0 0.3rem 0.6rem rgba(0, 0, 0, 0.1);
+            transition: background 0.3s ease;
+        }
+
+        .input-group-append button:hover {
+            background: linear-gradient(45deg, #00c8ff, #004b7c);
+        }
+
+        .table-responsive {
+            max-height: 80vh;
+            overflow-y: auto;
+            overflow-x: auto;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 1rem;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 2rem;
+            border: 0.1rem solid #d1d1d1;
+            border-collapse: separate;
+            border-spacing: 0.5rem;
+            box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 1.5rem;
+            text-align: center;
+            vertical-align: middle;
+            max-width: 200px;
+            word-wrap: break-word;
+            border-bottom: 0.1rem solid #e0e0e0;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .ellipsis {
+            cursor: pointer;
+            color: #00b8d4;
+            text-decoration: underline;
+        }
+
+        .header__background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            clip-path: polygon(50% 100%, 100% 75%, 100% 15%, 50% 0%, 0% 15%, 0% 75%);
+            background: linear-gradient(145deg, #81c784, #00897b);
+            transform-origin: center;
+            animation: rotation 10s infinite linear;
+            opacity: 0.5;
+            z-index: -1;
+        }
+
+        @keyframes rotation {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(359deg); }
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem 0;
+            margin-top: 2rem;
+            color: #888;
         }
     </style>
 </head>
@@ -91,6 +218,7 @@
             <div class="shield">
                 <div class="ai">AI</div>
                 <div class="magnifying-glass"></div>
+                <div class="header__background"></div>
             </div>
             <div class="logo-text">PrivHunterAI</div>
         </div>
