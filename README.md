@@ -68,8 +68,10 @@
 
 ## 输出效果
 持续优化中，目前输出效果如下：
+
 1. 终端输出：
 <img src="https://github.com/Ed1s0nZ/PrivHunterAI/blob/main/img/%E6%95%88%E6%9E%9C.png" width="800px">  
+
 2. 前端输出（访问127.0.0.1:8222）：
 <img src="https://github.com/Ed1s0nZ/PrivHunterAI/blob/main/img/%E6%89%AB%E6%8F%8F%E7%BB%93%E6%9E%9C%E5%B1%95%E7%A4%BA.png" width="800px">  
 
