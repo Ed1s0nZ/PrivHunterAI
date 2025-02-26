@@ -41,11 +41,62 @@
             color: #007bff;
             text-decoration: underline;
         }
+        /* Logo 样式 */
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .shield {
+            position: relative;
+            width: 80px;
+            height: 100px;
+            background: linear-gradient(145deg, #4a90e2, #1f78d1);
+            clip-path: polygon(50% 100%, 100% 75%, 100% 15%, 50% 0%, 0% 15%, 0% 75%);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .magnifying-glass {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 35px;
+            height: 35px;
+            border: 4px solid #fff;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+        .ai {
+            position: absolute;
+            top: 25%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-weight: bold;
+            font-size: 14px;
+            color: #fff;
+        }
+        .logo-text {
+            margin-left: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 class="mb-4">PrivHunterAI 扫描结果</h1>
+        <!-- Logo 部分 -->
+        <div class="logo-container">
+            <div class="shield">
+                <div class="ai">AI</div>
+                <div class="magnifying-glass"></div>
+            </div>
+            <div class="logo-text">PrivHunterAI</div>
+        </div>
+
+        <!-- 工具内容 -->
+        <h1 class="mb-4">扫描结果</h1>
         <button class="btn btn-primary" onclick="fetchData()">Fetch Data</button>
         <button class="btn btn-success" onclick="filterData()">Filter Data</button>
         <div class="input-group mb-3 mt-3">
