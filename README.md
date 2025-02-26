@@ -37,7 +37,7 @@
     "outputFormat": {
       "json": {
         "res": "\"true\", \"false\" 或 \"unknown\"",
-        "reason": "简洁的判断原因，简要说明是否分析了url，总体不超过50字。"
+        "reason": "简洁的判断原因，总体不超过50字，可以标注越权的概率有多大。"
       }
     },
     "notes": [
