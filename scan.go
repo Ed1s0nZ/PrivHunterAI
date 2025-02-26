@@ -74,6 +74,17 @@ func scan() {
 							log.Fatalf("Error marshaling to JSON: %v", err)
 						}
 						log.Println(string(jsonData))
+						//--- 前端
+						var dataItem DataItem
+						// 解析 JSON 数据到结构体
+						err = json.Unmarshal([]byte(jsonData), &dataItem)
+						if err != nil {
+							log.Fatalf("Error parsing JSON: %v", err)
+						}
+						// 打印解析后的结构体内容
+						fmt.Printf("Parsed DataItem: %+v\n", dataItem)
+						Resp = append(Resp, dataItem)
+						//---
 						fmt.Println(PrintYuequan(resultOutput.Result, resultOutput.Method, resultOutput.Host+resultOutput.Path, resultOutput.Reason))
 						logs.Delete(key)
 						return true // 返回true继续遍历，返回false停止遍历
