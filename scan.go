@@ -47,11 +47,11 @@ func scan() {
 					fmt.Println(err)
 				} else {
 					var resultOutput Result
-					resultOutput.Method = r.Request.Method
-					resultOutput.Host = r.Request.URL.Host
-					resultOutput.Path = r.Request.URL.Path
-					resultOutput.RespBodyA = resp1
-					resultOutput.RespBodyB = resp2
+					resultOutput.Method = TruncateString(r.Request.Method)
+					resultOutput.Host = TruncateString(r.Request.URL.Host)
+					resultOutput.Path = TruncateString(r.Request.URL.Path)
+					resultOutput.RespBodyA = TruncateString(resp1)
+					resultOutput.RespBodyB = TruncateString(resp2)
 					//
 
 					result1, err := parseResponse(result)
@@ -82,7 +82,10 @@ func scan() {
 							log.Fatalf("Error parsing JSON: %v", err)
 						}
 						// 打印解析后的结构体内容
-						fmt.Printf("Parsed DataItem: %+v\n", dataItem)
+						// fmt.Printf("Parsed DataItem: %+v\n", dataItem)
+						// if dataItem.RespBodyB{
+
+						// }
 						Resp = append(Resp, dataItem)
 						//---
 						fmt.Println(PrintYuequan(resultOutput.Result, resultOutput.Method, resultOutput.Host+resultOutput.Path, resultOutput.Reason))
