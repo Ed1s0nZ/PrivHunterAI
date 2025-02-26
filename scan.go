@@ -86,7 +86,10 @@ func scan() {
 						// if dataItem.RespBodyB{
 
 						// }
-						Resp = append(Resp, dataItem)
+						if dataItem.Result != "white" {
+							Resp = append(Resp, dataItem)
+						}
+
 						//---
 						fmt.Println(PrintYuequan(resultOutput.Result, resultOutput.Method, resultOutput.Host+resultOutput.Path, resultOutput.Reason))
 						logs.Delete(key)
