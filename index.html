@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Display</title>
+    <!-- 引入 Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .table-responsive {
+            overflow-x: auto; /* 添加水平滚动条 */
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+        }
+        th, td {
+            text-align: center;
+            max-width: 200px; /* 限制单元格宽度 */
+            word-wrap: break-word; /* 允许内容换行 */
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .btn {
+            margin-right: 10px;
+        }
+        /* 折叠长文本的样式 */
+        .ellipsis {
+            cursor: pointer;
+            color: #007bff;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mb-4">Data Display</h1>
+        <button class="btn btn-primary" onclick="fetchData()">Fetch Data</button>
+        <button class="btn btn-success" onclick="filterData()">Filter Data</button>
+        <div class="input-group mb-3 mt-3">
+            <input type="text" class="form-control" id="filterResult" placeholder="Enter result value">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" onclick="filterData()">Filter</button>
+            </div>
+        </div>
+        <!-- 使用 table-responsive 包裹表格 -->
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Method</th>
+                        <th>Host</th>
+                        <th>Path</th>
+                        <th>RespBodyA</th>
+                        <th>RespBodyB</th>
+                        <th>Result</th>
+                        <th>Reason</th>
+                    </tr>
+                </thead>
+                <tbody id="dataTable">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 引入 Bootstrap 和 jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        async function fetchData() {
+            const response = await fetch('/data');
+            const data = await response.json();
+            displayData(data);
+        }
+
+        async function filterData() {
+            const filterValue = document.getElementById('filterResult').value;
+            const response = await fetch('/filter', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ result: filterValue })
+            });
+            const data = await response.json();
+            displayData(data);
+        }
+
+        function displayData(data) {
+            const tableBody = document.querySelector('#dataTable');
+            tableBody.innerHTML = '';
+            data.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.method}</td>
+                    <td class="ellipsis" data-full-text="${item.host}">${item.host}</td>
+                    <td>${item.path}</td>
+                    <td>${item.respBodyA}</td>
+                    <td>${item.respBodyB}</td>
+                    <td>${item.result}</td>
+                    <td>${item.reason}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // 折叠长文本的交互逻辑
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.ellipsis').forEach(element => {
+                element.addEventListener('click', () => {
+                    const fullText = element.getAttribute('data-full-text');
+                    alert(`Full Host: ${fullText}`);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
