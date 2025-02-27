@@ -8,6 +8,7 @@ import (
 	"io"
 	"net/http"
 	"time"
+	"yuequanScan/config"
 )
 
 const (
@@ -55,7 +56,7 @@ func CreateChatCompletion(request ChatCompletionRequestDeepSeek) (*ChatCompletio
 	}
 
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", "Bearer "+apiKeyDeepSeek)
+	req.Header.Set("Authorization", "Bearer "+config.GetConfig().APIKeys.DeepSeek)
 
 	resp, err := client.Do(req)
 	if err != nil {
@@ -87,7 +88,7 @@ func DeepSeek(url, respA, respB string) (string, error) {
 		Messages: []MessageDeepSeek{
 			{
 				Role:    "system",
-				Content: prompt,
+				Content: config.Prompt,
 			},
 			{
 				Role:    "user",
