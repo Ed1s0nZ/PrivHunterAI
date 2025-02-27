@@ -1,0 +1,30 @@
+{
+    "AI": "qianwen",
+    "apiKeys": {
+        "kimi": "sk-xxxxxxx",
+        "deepseek": "sk-yyyyyyy",
+        "qianwen": "sk-zzzzzzz"
+      },
+    "cookie2": "cookie2",
+    "suffixes": [
+      ".js", ".ico", ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".svg", ".ttf", ".woff", ".woff2", ".eot", ".otf",
+      ".mp3", ".wav", ".ogg", ".mp4", ".webm", ".avi", ".css", ".scss", ".less",
+      ".tmp", ".temp", ".cache", ".swp",
+      ".log", ".err",
+      ".env", ".json", ".yml", ".yaml", ".xml", ".ini",
+      ".class", ".dll", ".so", ".zip", ".tar", ".gz",
+      ".txt", ".md", ".doc", ".docx", ".pdf", ".csv", ".xlsx", ".xls", ".sh", ".bat",
+      ".gitignore", ".lock", ".bak"
+    ],
+    "allowedRespHeaders": [
+      "image/png",
+      "text/html",
+      "application/pdf",
+      "text/css",
+      "audio/mpeg",
+      "audio/wav",
+      "video/mp4",
+      "application/grpc"
+    ]
+    
+  }
