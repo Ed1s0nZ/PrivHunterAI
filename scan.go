@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 	aiapis "yuequanScan/AIAPIS"
+	"yuequanScan/config"
 )
 
 type Result struct {
@@ -115,14 +116,14 @@ func sendHTTPAndKimi(r *RequestResponseLog) (result string, respA string, respB 
 		RawQuery: r.Request.URL.RawQuery,
 	}
 
-	if isNotSuffix(r.Request.URL.Path, suffixes) && !containsString(r.Response.Header.Get("Content-Type"), allowedRespHeaders) {
+	if isNotSuffix(r.Request.URL.Path, config.GetConfig().Suffixes) && !containsString(r.Response.Header.Get("Content-Type"), config.GetConfig().AllowedRespHeaders) {
 		req, err := http.NewRequest(r.Request.Method, fullURL.String(), strings.NewReader(string(r.Request.Body)))
 		if err != nil {
 			fmt.Println("创建请求失败:", err)
 			return "", "", "", err
 		}
 		req.Header = r.Request.Header
-		req.Header.Set("Cookie", cookie2)
+		req.Header.Set("Cookie", config.GetConfig().Cookie2)
 		client := &http.Client{}
 		resp, err := client.Do(req)
 		if err != nil {
@@ -141,7 +142,7 @@ func sendHTTPAndKimi(r *RequestResponseLog) (result string, respA string, respB 
 		// fmt.Println("Response1 Body:", resp1)
 		// fmt.Println("Response2 Body:", resp2)
 		if len(resp1+resp2) < 65535 {
-			result, err := detectPrivilegeEscalation(AI, fullURL.String(), resp1, resp2)
+			result, err := detectPrivilegeEscalation(config.GetConfig().AI, fullURL.String(), resp1, resp2)
 			if err != nil {
 				fmt.Println("Error:", err)
 				return "", "", "", err
