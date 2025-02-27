@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"yuequanScan/config"
 )
 
 // 定义请求参数结构体
@@ -40,7 +41,7 @@ func Kimi(url, respA, respB string) (string, error) {
 		Messages: []MessageKimi{
 			{
 				Role:    "system",
-				Content: prompt,
+				Content: config.Prompt,
 			},
 			{
 				Role:    "user",
@@ -63,7 +64,7 @@ func Kimi(url, respA, respB string) (string, error) {
 		fmt.Println("创建请求失败:", err)
 		return "", err
 	}
-	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", apiKeyKimi))
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", config.GetConfig().APIKeys.Kimi))
 	req.Header.Set("Content-Type", "application/json")
 
 	// 发送请求
