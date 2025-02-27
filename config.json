@@ -5,7 +5,11 @@
         "deepseek": "sk-yyyyyyy",
         "qianwen": "sk-zzzzzzz"
       },
-    "cookie2": "cookie2",
+    "headers2": {
+    "Cookie":"Cookie2",
+    "User-Agent": "PrivHunterAI",
+    "Custom-Header": "CustomValue"
+  },
     "suffixes": [
       ".js", ".ico", ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".svg", ".ttf", ".woff", ".woff2", ".eot", ".otf",
       ".mp3", ".wav", ".ogg", ".mp4", ".webm", ".avi", ".css", ".scss", ".less",
