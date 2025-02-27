@@ -123,7 +123,15 @@ func sendHTTPAndKimi(r *RequestResponseLog) (result string, respA string, respB 
 			return "", "", "", err
 		}
 		req.Header = r.Request.Header
-		req.Header.Set("Cookie", config.GetConfig().Cookie2)
+		// 增加其他头 2025 02 27
+		if config.GetConfig().Headers2 != nil {
+			for key, value := range config.GetConfig().Headers2 {
+				req.Header.Set(key, value)
+			}
+		}
+		// 2025 02 27 end
+		// req.Header.Set("Cookie", config.GetConfig().Cookie2)
+
 		client := &http.Client{}
 		resp, err := client.Do(req)
 		if err != nil {
