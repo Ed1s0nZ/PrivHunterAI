@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"time"
+	"yuequanScan/config"
 )
 
 // 通义千问API配置
@@ -55,7 +56,7 @@ func Qianwen(url, respA, respB string) (string, error) {
 			Messages: []Message{
 				{
 					Role:    "system",
-					Content: prompt,
+					Content: config.Prompt,
 				},
 				{
 					Role:    "user",
@@ -80,7 +81,7 @@ func Qianwen(url, respA, respB string) (string, error) {
 
 	// 设置请求头
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", "Bearer "+apiKeyQianwen)
+	req.Header.Set("Authorization", "Bearer "+config.GetConfig().APIKeys.Qianwen)
 	req.Header.Set("X-DashScope-Request-ID", fmt.Sprintf("%d", time.Now().UnixNano()))
 	req.Header.Set("X-DashScope-SSEService", "simple")
 
