@@ -3,16 +3,15 @@ package config
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 )
 
 // 配置结构
 type Config struct {
-	AI                 string   `json:"AI"`
-	Cookie2            string   `json:"cookie2"`
-	Suffixes           []string `json:"suffixes"`
-	AllowedRespHeaders []string `json:"allowedRespHeaders"`
+	AI                 string            `json:"AI"`
+	Headers2           map[string]string `json:"headers2"`
+	Suffixes           []string          `json:"suffixes"`
+	AllowedRespHeaders []string          `json:"allowedRespHeaders"`
 	APIKeys            struct {
 		Kimi     string `json:"kimi"`
 		DeepSeek string `json:"deepseek"`
@@ -63,7 +62,7 @@ var Prompt = `{"role": "你是一个AI，负责通过比较两个HTTP响应数�
 
 // 加载配置文件
 func loadConfig(filePath string) error {
-	data, err := ioutil.ReadFile(filePath)
+	data, err := os.ReadFile(filePath)
 	if err != nil {
 		return err
 	}
