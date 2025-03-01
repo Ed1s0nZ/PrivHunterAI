@@ -31,7 +31,7 @@ type ChoiceKimi struct {
 	Message MessageKimi `json:"message"`
 }
 
-func Kimi(url, respA, respB string) (string, error) {
+func Kimi(reqA, respA, respB, statusB string) (string, error) {
 	// 设置 API Key 和请求 URL
 	apiURL := "https://api.moonshot.cn/v1/chat/completions"
 
@@ -45,7 +45,7 @@ func Kimi(url, respA, respB string) (string, error) {
 			},
 			{
 				Role:    "user",
-				Content: "url:" + url + "A:" + respA + "B:" + respB,
+				Content: "reqA:" + reqA + "\n" + "responseA:" + respA + "\n" + "responseB:" + respB + "\n" + "statusB:" + statusB,
 			},
 		},
 		Temperature: 0.3,
