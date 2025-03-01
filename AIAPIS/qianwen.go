@@ -49,7 +49,7 @@ type QWenResponse struct {
 }
 
 // 调用通义千问
-func Qianwen(url, respA, respB string) (string, error) {
+func Qianwen(reqA, respA, respB, statusB string) (string, error) {
 	requestBody := QWenRequest{
 		Model: "qwen-turbo", // 可根据需要切换模型
 		Input: RequestInput{
@@ -60,7 +60,7 @@ func Qianwen(url, respA, respB string) (string, error) {
 				},
 				{
 					Role:    "user",
-					Content: "url:" + url + "A:" + respA + "B:" + respB,
+					Content: "reqA:" + reqA + "\n" + "responseA:" + respA + "\n" + "responseB:" + respB + "\n" + "statusB:" + statusB,
 				},
 			},
 		},
