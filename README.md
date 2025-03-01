@@ -15,6 +15,9 @@
   3. ⭐️新增通义千问 AI引擎来检测越权;
   4. ⭐️新增前端结果展示功能。
   5. ⭐️新增针对请求B添加其他headers的功能（适配有些鉴权不在cookie中做的场景）。
+- 2025.03.01
+  1. 优化Prompt，降低误报率；
+  2. 优化重试机制，重试会提示类似:`AI分析异常，重试中，异常原因： API returned 401: {"code":"InvalidApiKey","message":"Invalid API-key provided.","request_id":"xxxxx"}`，每10秒重试一次，重试5次失败后放弃重试（避免无限重试）。
 
 ## 工作流程
 <img src="https://github.com/Ed1s0nZ/PrivHunterAI/blob/main/img/%E6%B5%81%E7%A8%8B%E5%9B%BE.png" width="800px">  
