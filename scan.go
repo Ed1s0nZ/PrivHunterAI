@@ -107,75 +107,7 @@ func scan() {
 	}
 }
 
-// func sendHTTPAndKimi(r *RequestResponseLog) (result string, respA string, respB string, err error) {
-// 	jsonDataReq, err := json.Marshal(r.Request)
-// 	if err != nil {
-// 		fmt.Println("Error marshaling:", err)
-// 		// return
-// 	}
-// 	req1 := string(jsonDataReq)
 
-// 	resp1 := string(r.Response.Body)
-
-// 	fullURL := &url.URL{
-// 		Scheme:   r.Request.URL.Scheme,
-// 		Host:     r.Request.URL.Host,
-// 		Path:     r.Request.URL.Path,
-// 		RawQuery: r.Request.URL.RawQuery,
-// 	}
-
-// 	if isNotSuffix(r.Request.URL.Path, config.GetConfig().Suffixes) && !containsString(r.Response.Header.Get("Content-Type"), config.GetConfig().AllowedRespHeaders) {
-
-// 		req, err := http.NewRequest(r.Request.Method, fullURL.String(), strings.NewReader(string(r.Request.Body)))
-// 		if err != nil {
-// 			fmt.Println("创建请求失败:", err)
-// 			return "", "", "", err
-// 		}
-// 		req.Header = r.Request.Header
-// 		// 增加其他头 2025 02 27
-// 		if config.GetConfig().Headers2 != nil {
-// 			for key, value := range config.GetConfig().Headers2 {
-// 				req.Header.Set(key, value)
-// 			}
-// 		}
-// 		// 2025 02 27 end
-// 		// req.Header.Set("Cookie", config.GetConfig().Cookie2)
-// 		// log.Println(req.Header)
-// 		client := &http.Client{}
-// 		resp, err := client.Do(req)
-// 		if err != nil {
-// 			fmt.Println("请求失败:", err)
-// 			return "", "", "", err
-// 		}
-// 		defer resp.Body.Close()
-// 		bodyBytes, err := io.ReadAll(resp.Body)
-// 		if err != nil {
-// 			fmt.Println("Error reading response body:", err)
-// 			return "", "", "", err
-// 		}
-// 		// 将响应体转换为字符串
-// 		resp2 := string(bodyBytes)
-// 		// 输出响应体字符串
-// 		// fmt.Println("Response1 Body:", resp1)
-// 		// fmt.Println("Response2 Body:", resp2)
-// 		if len(resp1+resp2) < 65535 {
-// 			fmt.Println("Serialized JSON:", req1)
-// 			result, err := detectPrivilegeEscalation(config.GetConfig().AI, fullURL.String(), resp1, resp2)
-// 			if err != nil {
-// 				fmt.Println("Error:", err)
-
-// 				return "", "", "", err
-// 			}
-// 			return result, resp1, resp2, nil
-// 		} else {
-// 			return `{"res": "white", "reason": "请求包太大"}`, resp1, resp2, nil
-// 		}
-
-// 		// log.Println("Result:", result)
-
-//		}
-//		return `{"res": "white", "reason": "白名单后缀或白名单Content-Type接口"}`, resp1, "", nil
-//	}
 func sendHTTPAndKimi(r *RequestResponseLog) (result string, respA string, respB string, err error) {
 	jsonDataReq, err := json.Marshal(r.Request)
 	if err != nil {
