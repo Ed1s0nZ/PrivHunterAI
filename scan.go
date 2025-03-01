@@ -157,8 +157,6 @@ func sendHTTPAndKimi(r *RequestResponseLog) (result string, respA string, respB 
 		resp2 := string(bodyBytes)
 
 		if len(resp1+resp2) < 65535 {
-			fmt.Println("Serialized JSON:", req1)
-
 			// 初始值
 			var resultDetect string
 			var detectErr error
