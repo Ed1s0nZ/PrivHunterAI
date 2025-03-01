@@ -81,7 +81,7 @@ func CreateChatCompletion(request ChatCompletionRequestDeepSeek) (*ChatCompletio
 	return &response, nil
 }
 
-func DeepSeek(url, respA, respB string) (string, error) {
+func DeepSeek(reqA, respA, respB, statusB string) (string, error) {
 	// 示例请求
 	request := ChatCompletionRequestDeepSeek{
 		Model: "deepseek-chat", // 根据实际模型名称修改
@@ -92,7 +92,7 @@ func DeepSeek(url, respA, respB string) (string, error) {
 			},
 			{
 				Role:    "user",
-				Content: "url:" + url + "A:" + respA + "B:" + respB,
+				Content: "reqA:" + reqA + "\n" + "responseA:" + respA + "\n" + "responseB:" + respB + "\n" + "statusB:" + statusB,
 			},
 		},
 		Temperature: 0.7,
