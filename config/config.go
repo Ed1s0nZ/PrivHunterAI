@@ -17,6 +17,7 @@ type Config struct {
 		DeepSeek string `json:"deepseek"`
 		Qianwen  string `json:"qianwen"`
 	} `json:"apiKeys"`
+	RespBodyBWhiteList []string `json:"respBodyBWhiteList"`
 }
 
 // 全局配置变量
