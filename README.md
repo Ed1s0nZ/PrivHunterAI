@@ -1,23 +1,20 @@
 # PrivHunterAI   
 本工具通过被动代理方式调用Kimi、DeepSeek、混元和通义千问AI，实现越权漏洞检测。检测能力基于对应AI引擎的API实现，且支持HTTPS协议。
 ## 时间线
-- 2025.02.06
-  1. ⭐️新增DeepSeek AI引擎来检测越权；
 - 2025.02.18
   1. ⭐️新增扫描失败重试机制，避免出现漏扫；
   2. ⭐️新增响应Content-Type白名单，静态文件不扫描；
   3. ⭐️新增限制每次扫描向AI请求的最大字节，避免因请求包过大导致扫描失败。
 - 2025.02.25 -02.27
   1. ⭐️新增对URL的分析（初步判断是否可能是无需数据鉴权的公共接口）；
-  2. ⭐️新增通义千问 AI引擎来检测越权;
-  3. ⭐️新增前端结果展示功能。
-  4. ⭐️新增针对请求B添加其他headers的功能（适配有些鉴权不在cookie中做的场景）。
+  2. ⭐️新增前端结果展示功能。
+  3. ⭐️新增针对请求B添加其他headers的功能（适配有些鉴权不在cookie中做的场景）。
 - 2025.03.01
   1. 优化Prompt，降低误报率；
   2. 优化重试机制，重试会提示类似:`AI分析异常，重试中，异常原因： API returned 401: {"code":"InvalidApiKey","message":"Invalid API-key provided.","request_id":"xxxxx"}`，每10秒重试一次，重试5次失败后放弃重试（避免无限重试）.
 - 2025.03.03
   1. 💰成本优化：在调用 AI 判断越权前，新增鉴权关键字（如 “暂无查询权限”“权限不足” 等）过滤环节，若匹配到关键字则直接输出未越权结果，节省 AI tokens 花销，提升资源利用效率;
-  2. ⭐️新增混元 AI引擎来检测越权;
+  
 
 ## 工作流程
 <img src="https://github.com/Ed1s0nZ/PrivHunterAI/blob/main/img/%E6%B5%81%E7%A8%8B.png" width="800px">  
@@ -89,7 +86,7 @@
 ### 配置文件介绍（config.json）
 | 字段             | 用途                                                                                   | 内容举例                                                                                                  |
 |------------------|----------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|
-| `AI`             | 指定所使用的 AI 模型                                                                   | `qianwen`、`kimi`、`hunyuan` 或 `deepseek`                                                                                              |
+| `AI`             | 指定所使用的 AI 模型                                                                   | `qianwen`、`kimi`、`hunyuan` 、`gpt`、`glm` 或 `deepseek`                                                                                              |
 | `apiKeys`        | 存储不同 AI 服务对应的 API 密钥 （填一个即可，与AI对应）                                                        | - `"kimi": "sk-xxxxxxx"`<br>- `"deepseek": "sk-yyyyyyy"`<br>- `"qianwen": "sk-zzzzzzz"`<br>- `"hunyuan": "sk-aaaaaaa"`                 |
 | `headers2`       | 自定义请求B的 HTTP 请求头信息                                                           | - `"Cookie": "Cookie2"`<br>- `"User-Agent": "PrivHunterAI"`<br>- `"Custom-Header": "CustomValue"`    |
 | `suffixes`       | 需要过滤的文件后缀名列表                                                     | `.js`、`.ico`、`.png`、`.jpg`、 `.jpeg`                                                |
