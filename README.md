@@ -96,7 +96,7 @@
 | `headers2`       | 自定义请求B的 HTTP 请求头信息                                                           | - `"Cookie": "Cookie2"`<br>- `"User-Agent": "PrivHunterAI"`<br>- `"Custom-Header": "CustomValue"`    |
 | `suffixes`       | 需要过滤的文件后缀名列表                                                     | `.js`、`.ico`、`.png`、`.jpg`、 `.jpeg`                                                |
 | `allowedRespHeaders` | 需要过滤的 HTTP 响应头中的内容类型（`Content-Type`）                                       | `image/png`、`text/html`、`application/pdf`、`text/css`、`audio/mpeg`、`audio/wav`、`video/mp4`、`application/grpc`|
-| `respBodyBWhiteList` | 鉴权关键字（如暂无查询权限、权限不足），用于初筛未越权的接口 | - `参数错误`<br>- `数据页数不正确`<br>- `文件不存在`<br>- `系统繁忙，请稍后再试`<br>- `请求参数格式不正确`<br>- `权限不足`<br>- `Token不可为空`<br>- `内部错误`<br>- ` |
+| `respBodyBWhiteList` | 鉴权关键字（如暂无查询权限、权限不足），用于初筛未越权的接口 | - `参数错误`<br>- `数据页数不正确`<br>- `文件不存在`<br>- `系统繁忙，请稍后再试`<br>- `请求参数格式不正确`<br>- `权限不足`<br>- `Token不可为空`<br>- `内部错误`|
 
 ## 输出效果
 持续优化中，目前输出效果如下：
