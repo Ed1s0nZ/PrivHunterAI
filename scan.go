@@ -123,9 +123,7 @@ func sendHTTPAndKimi(r *RequestResponseLog) (result string, respA string, respB 
 		Path:     r.Request.URL.Path,
 		RawQuery: r.Request.URL.RawQuery,
 	}
-	fmt.Println(fullURL)
 	if isNotSuffix(r.Request.URL.Path, config.GetConfig().Suffixes) && !containsString(r.Response.Header.Get("Content-Type"), config.GetConfig().AllowedRespHeaders) {
-
 		req, err := http.NewRequest(r.Request.Method, fullURL.String(), strings.NewReader(string(r.Request.Body)))
 		if err != nil {
 			fmt.Println("创建请求失败:", err)
@@ -201,6 +199,8 @@ func detectPrivilegeEscalation(AI string, reqA, resp1, resp2, statusB string) (s
 		result, err = aiapis.DeepSeek(reqA, resp1, resp2, statusB) // 调用 deepSeek 检测是否越权
 	case "qianwen":
 		result, err = aiapis.Qianwen(reqA, resp1, resp2, statusB) // 调用 qianwen 检测是否越权
+	case "hunyuan":
+		result, err = aiapis.HunYuan(reqA, resp1, resp2, statusB) // 调用 hunyuan 检测是否越权
 	default:
 		result, err = aiapis.Kimi(reqA, resp1, resp2, statusB) // 默认调用 kimi 检测是否越权
 	}
