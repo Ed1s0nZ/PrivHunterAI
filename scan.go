@@ -123,7 +123,7 @@ func sendHTTPAndKimi(r *RequestResponseLog) (result string, respA string, respB 
 		Path:     r.Request.URL.Path,
 		RawQuery: r.Request.URL.RawQuery,
 	}
-
+	fmt.Println(fullURL)
 	if isNotSuffix(r.Request.URL.Path, config.GetConfig().Suffixes) && !containsString(r.Response.Header.Get("Content-Type"), config.GetConfig().AllowedRespHeaders) {
 
 		req, err := http.NewRequest(r.Request.Method, fullURL.String(), strings.NewReader(string(r.Request.Body)))
@@ -157,27 +157,31 @@ func sendHTTPAndKimi(r *RequestResponseLog) (result string, respA string, respB 
 		resp2 := string(bodyBytes)
 
 		if len(resp1+resp2) < 65535 {
-
-			// 初始值
-			var resultDetect string
-			var detectErr error
-			maxRetries := 5
-			for i := 0; i < maxRetries; i++ {
-				resultDetect, detectErr = detectPrivilegeEscalation(config.GetConfig().AI, req1, resp1, resp2, resp.Status)
-				if detectErr == nil {
-					break // 成功退出循环
+			if !MatchString(config.GetConfig().RespBodyBWhiteList, resp2) {
+				// 初始值
+				var resultDetect string
+				var detectErr error
+				maxRetries := 5
+				for i := 0; i < maxRetries; i++ {
+					resultDetect, detectErr = detectPrivilegeEscalation(config.GetConfig().AI, req1, resp1, resp2, resp.Status)
+					if detectErr == nil {
+						break // 成功退出循环
+					}
+					// 可选：增加延迟避免频繁请求
+					fmt.Println("AI分析异常，重试中，异常原因：", detectErr)
+					time.Sleep(5 * time.Second) // 1秒延迟
 				}
-				// 可选：增加延迟避免频繁请求
-				fmt.Println("AI分析异常，重试中，异常原因：", detectErr)
-				time.Sleep(5 * time.Second) // 1秒延迟
+
+				if detectErr != nil {
+					fmt.Println("Error after retries:", detectErr)
+					return "", "", "", detectErr
+				}
+
+				return resultDetect, resp1, resp2, nil
+			} else {
+				return `{"res": "false", "reason": "匹配到关键字，判断为无越权（未消耗AI tokens）"}`, resp1, resp2, nil
 			}
 
-			if detectErr != nil {
-				fmt.Println("Error after retries:", detectErr)
-				return "", "", "", detectErr
-			}
-
-			return resultDetect, resp1, resp2, nil
 		} else {
 			return `{"res": "white", "reason": "请求包太大"}`, resp1, resp2, nil
 		}
