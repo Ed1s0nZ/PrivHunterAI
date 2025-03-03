@@ -22,7 +22,7 @@
   1. 在使用AI来判断是否越权前，通过鉴权关键字（如暂无查询权限、权限不足）过滤一遍数据，若匹配到鉴权关键字，则直接输出结果为未越权，通过此方法可以节省AI tokens花销。
 
 ## 工作流程
-<img src="https://github.com/Ed1s0nZ/PrivHunterAI/blob/main/img/%E6%B5%81%E7%A8%8B%E5%9B%BE.png" width="800px">  
+<img src="https://github.com/Ed1s0nZ/PrivHunterAI/blob/main/img/%E6%B5%81%E7%A8%8B.png" width="800px">  
 
 ## Prompt
 ```
