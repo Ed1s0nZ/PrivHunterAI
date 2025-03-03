@@ -194,15 +194,40 @@ func detectPrivilegeEscalation(AI string, reqA, resp1, resp2, statusB string) (s
 
 	switch AI {
 	case "kimi":
-		result, err = aiapis.Kimi(reqA, resp1, resp2, statusB) // 调用 kimi 检测是否越权
+		model := "moonshot-v1-8k"
+		aiurl := "https://api.moonshot.cn/v1/chat/completions"
+		apikey := config.GetConfig().APIKeys.Kimi
+		result, err = aiapis.AIScan(model, aiurl, apikey, reqA, resp1, resp2, statusB) // 调用 kimi 检测是否越权
 	case "deepseek":
-		result, err = aiapis.DeepSeek(reqA, resp1, resp2, statusB) // 调用 deepSeek 检测是否越权
+		model := "deepseek-chat"
+		aiurl := "https://api.deepseek.com/v1/chat/completions"
+		apikey := config.GetConfig().APIKeys.DeepSeek
+		result, err = aiapis.AIScan(model, aiurl, apikey, reqA, resp1, resp2, statusB) // 调用 kimi 检测是否越权
 	case "qianwen":
-		result, err = aiapis.Qianwen(reqA, resp1, resp2, statusB) // 调用 qianwen 检测是否越权
+		model := "qwen-turbo"
+		aiurl := "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"
+		apikey := config.GetConfig().APIKeys.Qianwen
+		result, err = aiapis.AIScan(model, aiurl, apikey, reqA, resp1, resp2, statusB) // 调用 kimi 检测是否越权
 	case "hunyuan":
-		result, err = aiapis.HunYuan(reqA, resp1, resp2, statusB) // 调用 hunyuan 检测是否越权
+		model := "hunyuan-turbo"
+		aiurl := "https://api.hunyuan.cloud.tencent.com/v1/chat/completions"
+		apikey := config.GetConfig().APIKeys.HunYuan
+		result, err = aiapis.AIScan(model, aiurl, apikey, reqA, resp1, resp2, statusB) // 调用 hunyuan 检测是否越权
+	case "glm":
+		model := "glm-4-air"
+		aiurl := "https://open.bigmodel.cn/api/paas/v4/chat/completions"
+		apikey := config.GetConfig().APIKeys.Glm
+		result, err = aiapis.AIScan(model, aiurl, apikey, reqA, resp1, resp2, statusB) // 调用 hunyuan 检测是否越权
+	case "gpt":
+		model := "gpt-4o"
+		aiurl := "https://open.bigmodel.cn/api/paas/v4/chat/completions"
+		apikey := config.GetConfig().APIKeys.Gpt
+		result, err = aiapis.AIScan(model, aiurl, apikey, reqA, resp1, resp2, statusB) // 调用 hunyuan 检测是否越权
 	default:
-		result, err = aiapis.Kimi(reqA, resp1, resp2, statusB) // 默认调用 kimi 检测是否越权
+		model := "moonshot-v1-8k"
+		aiurl := "https://api.moonshot.cn/v1/chat/completions"
+		apikey := config.GetConfig().APIKeys.Kimi
+		result, err = aiapis.AIScan(model, aiurl, apikey, reqA, resp1, resp2, statusB) // 调用 kimi 检测是否越权
 	}
 
 	if err != nil {
