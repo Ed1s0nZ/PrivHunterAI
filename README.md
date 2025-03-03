@@ -89,7 +89,7 @@
 ### 配置文件介绍（config.json）
 | 字段             | 用途                                                                                   | 内容举例                                                                                                  |
 |------------------|----------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|
-| `AI`             | 指定所使用的 AI 模型                                                                   | `qianwen`、`kimi` 或 `deepseek`                                                                                              |
+| `AI`             | 指定所使用的 AI 模型                                                                   | `qianwen`、`kimi`、`hunyuan` 或 `deepseek`                                                                                              |
 | `apiKeys`        | 存储不同 AI 服务对应的 API 密钥 （填一个即可，与AI对应）                                                        | - `"kimi": "sk-xxxxxxx"`<br>- `"deepseek": "sk-yyyyyyy"`<br>- `"qianwen": "sk-zzzzzzz"`<br>- `"hunyuan": "sk-aaaaaaa"`                 |
 | `headers2`       | 自定义请求B的 HTTP 请求头信息                                                           | - `"Cookie": "Cookie2"`<br>- `"User-Agent": "PrivHunterAI"`<br>- `"Custom-Header": "CustomValue"`    |
 | `suffixes`       | 需要过滤的文件后缀名列表                                                     | `.js`、`.ico`、`.png`、`.jpg`、 `.jpeg`                                                |
