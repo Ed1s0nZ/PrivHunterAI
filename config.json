@@ -1,9 +1,10 @@
 {
-  "AI": "qianwen",
+  "AI": "hunyuan",
   "apiKeys": {
     "kimi": "sk-xxxxxxx",
     "deepseek": "sk-yyyyyyy",
-    "qianwen": "sk-zzzzzzz"
+    "qianwen": "sk-zzzzzzz",
+    "hunyuan":"sk-aaaaaaaa"
   },
   "headers2": {
     "Cookie": "Cookie2",
