@@ -91,3 +91,27 @@ func TruncateString(s string) string {
 	// 将截取的部分和省略号拼接起来
 	return fmt.Sprintf("%s...%s", string(start), string(end))
 }
+
+// 扫描接口白名单、匹配相应包关键字
+func MatchString(keywords []string, str string) bool {
+	switch len(keywords) {
+	case 0:
+		return false
+	case 1:
+		return strings.Contains(str, keywords[0])
+	default:
+		pattern := GeneratePattern(keywords)
+		matched, err := regexp.MatchString(pattern, str)
+		if err != nil {
+			panic(err)
+		}
+		return matched
+	}
+}
+func GeneratePattern(keywords []string) string {
+	var pattern strings.Builder
+	pattern.WriteString("(")
+	pattern.WriteString(strings.Join(keywords, "|"))
+	pattern.WriteString(")")
+	return pattern.String()
+}
