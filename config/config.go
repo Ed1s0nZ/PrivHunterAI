@@ -17,6 +17,8 @@ type Config struct {
 		DeepSeek string `json:"deepseek"`
 		Qianwen  string `json:"qianwen"`
 		HunYuan  string `json:"hunyuan"`
+		Gpt      string `json:"gpt"`
+		Glm      string `json:"glm"`
 	} `json:"apiKeys"`
 	RespBodyBWhiteList []string `json:"respBodyBWhiteList"`
 }
