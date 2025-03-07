@@ -72,7 +72,7 @@ var Prompt = `{
     "对比HTTP状态码，403/401直接判定为false，500标记为unknown。",
     "检查responseB是否包含responseA的敏感数据（如user_id、email），如果有，则判定为true。",
     "检查responseB是否返回错误信息（Access Denied / Forbidden），如果有，则判定为false。",
-    "计算responseA和responseB的结构相似度，并使用Levenshtein编辑距离计算文本相似度。",
+    "计算responseA和responseB的结构相似度，并使用Levenshtein编辑距离计算文本相似度，计算时忽略动态字段（如时间戳、随机数、会话ID、X-Request-ID等）。",
     "如果responseB内容为空（null、{}、[]），判断可能是权限受限，判定为false。",
     "根据分析结果，返回JSON结果。"
   ]
