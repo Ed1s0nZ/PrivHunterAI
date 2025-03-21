@@ -11,6 +11,8 @@ import (
 	"time"
 	aiapis "yuequanScan/AIAPIS"
 	"yuequanScan/config"
+
+	"github.com/lqqyt2423/go-mitmproxy/proxy"
 )
 
 type Result struct {
@@ -93,7 +95,7 @@ func scan() {
 						}
 
 						//---
-						fmt.Println(PrintYuequan(resultOutput.Result, resultOutput.Method, resultOutput.Host+resultOutput.Path, resultOutput.Reason))
+						log.Println(PrintYuequan(resultOutput.Result, resultOutput.Method, resultOutput.Host+resultOutput.Path, resultOutput.Reason))
 						logs.Delete(key)
 						return true // 返回true继续遍历，返回false停止遍历
 					}
@@ -108,6 +110,7 @@ func scan() {
 }
 
 func sendHTTPAndKimi(r *RequestResponseLog) (result string, respA string, respB string, err error) {
+
 	jsonDataReq, err := json.Marshal(r.Request)
 	if err != nil {
 		fmt.Println("Error marshaling:", err)
@@ -124,6 +127,7 @@ func sendHTTPAndKimi(r *RequestResponseLog) (result string, respA string, respB 
 		RawQuery: r.Request.URL.RawQuery,
 	}
 	if isNotSuffix(r.Request.URL.Path, config.GetConfig().Suffixes) && !containsString(r.Response.Header.Get("Content-Type"), config.GetConfig().AllowedRespHeaders) {
+		log.Println("Req1:", req1)
 		req, err := http.NewRequest(r.Request.Method, fullURL.String(), strings.NewReader(string(r.Request.Body)))
 		if err != nil {
 			fmt.Println("创建请求失败:", err)
@@ -139,6 +143,22 @@ func sendHTTPAndKimi(r *RequestResponseLog) (result string, respA string, respB 
 		// 2025 02 27 end
 		// req.Header.Set("Cookie", config.GetConfig().Cookie2)
 		// log.Println(req.Header)
+
+		requestInfo2 := proxy.Request{
+			Method: req.Method,
+			URL:    req.URL,
+
+			Proto:  req.Proto,
+			Header: req.Header,
+			Body:   r.Request.Body,
+		}
+		jsonDataReq2, err := json.Marshal(requestInfo2)
+		if err != nil {
+			fmt.Println("Error marshaling:", err)
+			return "", "", "", err // 返回错误
+		}
+		req2 := string(jsonDataReq2)
+		log.Println("Req2:", req2)
 		client := &http.Client{}
 		resp, err := client.Do(req)
 		if err != nil {
