@@ -127,7 +127,7 @@ func sendHTTPAndKimi(r *RequestResponseLog) (result string, respA string, respB 
 		RawQuery: r.Request.URL.RawQuery,
 	}
 	if isNotSuffix(r.Request.URL.Path, config.GetConfig().Suffixes) && !containsString(r.Response.Header.Get("Content-Type"), config.GetConfig().AllowedRespHeaders) {
-		log.Println("Req1:", req1)
+		log.Println("ReqA:", req1)
 		req, err := http.NewRequest(r.Request.Method, fullURL.String(), strings.NewReader(string(r.Request.Body)))
 		if err != nil {
 			fmt.Println("创建请求失败:", err)
@@ -158,7 +158,7 @@ func sendHTTPAndKimi(r *RequestResponseLog) (result string, respA string, respB 
 			return "", "", "", err // 返回错误
 		}
 		req2 := string(jsonDataReq2)
-		log.Println("Req2:", req2)
+		log.Println("ReqB:", req2)
 		client := &http.Client{}
 		resp, err := client.Do(req)
 		if err != nil {
