@@ -17,8 +17,8 @@ import (
 
 type Result struct {
 	Method    string `json:"method"`
-	Host      string `json:"host"` // JSON 标签用于自定义字段名
-	Path      string `json:"path"`
+	Url       string `json:"url"` // JSON 标签用于自定义字段名
+	Reqbody   string `json:"reqbody"`
 	RespBodyA string `json:"respBodyA"`
 	RespBodyB string `json:"respBodyB"`
 	Result    string `json:"result"`
@@ -54,8 +54,13 @@ func scan() {
 				} else {
 					var resultOutput Result
 					resultOutput.Method = TruncateString(r.Request.Method)
-					resultOutput.Host = TruncateString(r.Request.URL.Host)
-					resultOutput.Path = TruncateString(r.Request.URL.Path)
+					if r.Request.URL.RawQuery != "" {
+						resultOutput.Url = TruncateString(r.Request.URL.Host + r.Request.URL.Path + "?" + r.Request.URL.RawQuery)
+					} else {
+						resultOutput.Url = TruncateString(r.Request.URL.Host + r.Request.URL.Path)
+					}
+
+					resultOutput.Reqbody = TruncateString(string(r.Request.Body))
 					resultOutput.RespBodyA = TruncateString(resp1)
 					resultOutput.RespBodyB = TruncateString(resp2)
 					//
@@ -79,7 +84,7 @@ func scan() {
 						}
 						log.Println(string(jsonData))
 						//--- 前端
-						var dataItem DataItem
+						var dataItem Result
 						// 解析 JSON 数据到结构体
 						err = json.Unmarshal([]byte(jsonData), &dataItem)
 						if err != nil {
@@ -95,7 +100,7 @@ func scan() {
 						}
 
 						//---
-						log.Println(PrintYuequan(resultOutput.Result, resultOutput.Method, resultOutput.Host+resultOutput.Path, resultOutput.Reason))
+						log.Println(PrintYuequan(resultOutput.Result, resultOutput.Method, resultOutput.Url, resultOutput.Reason))
 						logs.Delete(key)
 						return true // 返回true继续遍历，返回false停止遍历
 					}
