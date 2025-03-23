@@ -239,8 +239,8 @@
                 <thead class="thead-light">
                     <tr>
                         <th>Method</th>
-                        <th>Host</th>
-                        <th>Path</th>
+                        <th>URL</th>
+                        <th>reqbody</th>
                         <th>RespBodyA</th>
                         <th>RespBodyB</th>
                         <th>Result</th>
@@ -284,8 +284,8 @@
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${item.method}</td>
-                    <td class="ellipsis" data-full-text="${item.host}">${item.host}</td>
-                    <td>${item.path}</td>
+                    <td class="ellipsis" data-full-text="${item.url}">${item.url}</td>
+                    <td>${item.reqbody}</td>
                     <td>${item.respBodyA}</td>
                     <td>${item.respBodyB}</td>
                     <td>${item.result}</td>
