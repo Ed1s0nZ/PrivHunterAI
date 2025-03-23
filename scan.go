@@ -55,9 +55,9 @@ func scan() {
 					var resultOutput Result
 					resultOutput.Method = TruncateString(r.Request.Method)
 					if r.Request.URL.RawQuery != "" {
-						resultOutput.Url = TruncateString(r.Request.URL.Host + r.Request.URL.Path + "?" + r.Request.URL.RawQuery)
+						resultOutput.Url = TruncateString(r.Request.URL.Scheme + "://" + r.Request.URL.Host + r.Request.URL.Path + "?" + r.Request.URL.RawQuery)
 					} else {
-						resultOutput.Url = TruncateString(r.Request.URL.Host + r.Request.URL.Path)
+						resultOutput.Url = TruncateString(r.Request.URL.Scheme + "://" +r.Request.URL.Host + r.Request.URL.Path)
 					}
 
 					resultOutput.Reqbody = TruncateString(string(r.Request.Body))
