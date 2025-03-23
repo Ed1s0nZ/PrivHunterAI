@@ -6,18 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// 定义数据结构
-type DataItem struct {
-	Method    string `json:"method"`
-	Host      string `json:"host"`
-	Path      string `json:"path"`
-	RespBodyA string `json:"respBodyA"`
-	RespBodyB string `json:"respBodyB"`
-	Result    string `json:"result"`
-	Reason    string `json:"reason"`
-}
-
-var Resp []DataItem // 数据存储在全局切片中
+var Resp []Result // 数据存储在全局切片中
 
 func Index() {
 	r := gin.Default()
@@ -37,7 +26,7 @@ func Index() {
 	})
 
 	r.POST("/update", func(c *gin.Context) {
-		var newData DataItem
+		var newData Result
 		if err := c.ShouldBindJSON(&newData); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
@@ -54,7 +43,7 @@ func Index() {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-		filteredData := []DataItem{}
+		filteredData := []Result{}
 		for _, item := range Resp {
 			if item.Result == filterData.Result {
 				filteredData = append(filteredData, item)
