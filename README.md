@@ -81,7 +81,7 @@
 2. 编辑根目录下的`config.json`文件，配置`AI`和对应的`apiKeys`（只需要配置一个即可）；（AI的值可配置qianwen、kimi、hunyuan、gpt、glm 或 deepseek） ；
 3. 配置`headers2`（请求B对应的headers）；可按需配置`suffixes`、`allowedRespHeaders`（接口后缀白名单，如.js）；
 4. 执行`go build`编译项目，并运行二进制文件（如果下载的是Releases可直接运行二进制文件）；
-5. 首次启动程序后需安装证书以解析 HTTPS 流量，证书会在首次启动程序后自动生成，路径为 ~/.mitmproxy/mitmproxy-ca-cert.pem。安装步骤可参考 Python mitmproxy 文档：[About Certificates](https://docs.mitmproxy.org/stable/concepts-certificates/)。
+5. 首次启动程序后需安装证书以解析 HTTPS 流量，证书会在首次启动程序后自动生成，路径为 ~/.mitmproxy/mitmproxy-ca-cert.pem(Windows路径为%USERPROFILE%\.mitmproxy\mitmproxy-ca-cert.pem)。安装步骤可参考 Python mitmproxy 文档：[About Certificates](https://docs.mitmproxy.org/stable/concepts-certificates/)。
 6. BurpSuite 挂下级代理 `127.0.0.1:9080`（端口可在`mitmproxy.go` 的`Addr:":9080",` 中配置）即可开始扫描；
 7. 终端和web界面均可查看扫描结果，前端查看结果请访问`127.0.0.1:8222` 。
 
