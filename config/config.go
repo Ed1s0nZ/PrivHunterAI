@@ -37,7 +37,7 @@ var Prompt = `{
     },
     "analysis_flow": {
         "preprocessing": [
-            "STEP1. 接口性质判断：通过reqA的URL/参数判断是否是/login /public等无需鉴权的接口",
+            "STEP1. 接口性质判断：结合原始请求A和响应A分析，判断是否可能是无需数据鉴权的公共接口（不作为主要判断依据）。",
             "STEP2. 动态字段过滤：自动忽略dynamic_fields中定义的字段（支持用户扩展）"
         ],
         "core_logic": {
