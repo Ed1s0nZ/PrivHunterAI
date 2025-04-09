@@ -81,6 +81,19 @@ func CreateChatCompletion(request ChatCompletionRequest, aiurl string, aiapikey 
 }
 
 func AIScan(model, aiurl, apikey, reqA, respA, respB, statusB string) (string, error) {
+	input := map[string]string{
+		"reqA":      reqA,
+		"responseA": respA,
+		"responseB": respB,
+		"statusB":   statusB,
+	}
+
+	inputJSON, err := json.Marshal(input)
+	if err != nil {
+		fmt.Printf("Error marshaling input: %v\n", err)
+		return "", err
+	}
+	fmt.Println(string(inputJSON))
 	request := ChatCompletionRequest{
 		Model: model, // 根据实际模型名称修改
 		Messages: []Message{
@@ -90,7 +103,7 @@ func AIScan(model, aiurl, apikey, reqA, respA, respB, statusB string) (string, e
 			},
 			{
 				Role:    "user",
-				Content: "reqA:" + reqA + "\n" + "responseA:" + respA + "\n" + "responseB:" + respB + "\n" + "statusB:" + statusB,
+				Content: string(inputJSON),
 			},
 		},
 		Temperature: 0.7,
@@ -104,8 +117,6 @@ func AIScan(model, aiurl, apikey, reqA, respA, respB, statusB string) (string, e
 	}
 
 	if len(response.Choices) > 0 {
-		// fmt.Println("Response:")
-		// fmt.Println(response.Choices[0].Message.Content)
 		return response.Choices[0].Message.Content, nil
 	} else {
 		fmt.Println("No response received")
