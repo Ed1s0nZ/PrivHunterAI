@@ -13,9 +13,11 @@
   1. 优化Prompt，降低误报率；
   2. 优化重试机制，重试会提示类似:`AI分析异常，重试中，异常原因： API returned 401: {"code":"InvalidApiKey","message":"Invalid API-key provided.","request_id":"xxxxx"}`，每10秒重试一次，重试5次失败后放弃重试（避免无限重试）。
 - 2025.03.03
-  1. 💰成本优化：在调用 AI 判断越权前，新增鉴权关键字（如 “暂无查询权限”“权限不足” 等）过滤环节，若匹配到关键字则直接输出未越权结果，节省 AI tokens 花销，提升资源利用效率;
+  1. 💰成本优化：在调用 AI 判断越权前，新增鉴权关键字（如 “暂无查询权限”“权限不足” 等）过滤环节，若匹配到关键字则直接输出未越权结果，节省 AI tokens 花销，提升资源利用效率。
 - 2025.03.21
   1. ⭐️新增终端输出请求包记录。
+- 2025.04.10
+  1. ⭐️新增可信度输出，并优化Prompt。
   
 
 ## 工作流程
@@ -138,7 +140,7 @@
 <img src="https://github.com/Ed1s0nZ/PrivHunterAI/blob/main/img/%E6%95%88%E6%9E%9C.png" width="800px">  
 
 2. 前端输出（访问127.0.0.1:8222）：
-<img src="https://github.com/Ed1s0nZ/PrivHunterAI/blob/main/img/%E7%BB%93%E6%9E%9C%E5%B1%95%E7%A4%BA.png" width="800px">  
+<img src="https://github.com/Ed1s0nZ/PrivHunterAI/blob/main/img/%E7%BB%93%E6%9E%9C.png" width="800px">  
 
 
 # 注意
