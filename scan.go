@@ -16,19 +16,21 @@ import (
 )
 
 type Result struct {
-	Method    string `json:"method"`
-	Url       string `json:"url"` // JSON 标签用于自定义字段名
-	Reqbody   string `json:"reqbody"`
-	RespBodyA string `json:"respBodyA"`
-	RespBodyB string `json:"respBodyB"`
-	Result    string `json:"result"`
-	Reason    string `json:"reason"`
+	Method     string `json:"method"`
+	Url        string `json:"url"` // JSON 标签用于自定义字段名
+	Reqbody    string `json:"reqbody"`
+	RespBodyA  string `json:"respBodyA"`
+	RespBodyB  string `json:"respBodyB"`
+	Result     string `json:"result"`
+	Reason     string `json:"reason"`
+	Confidence string `json:"confidence"`
 }
 
 // 扫描结果
 type ScanResult struct {
-	Res    string `json:"res"`
-	Reason string `json:"reason"`
+	Res        string `json:"res"`
+	Reason     string `json:"reason"`
+	Confidence string `json:"confidence"`
 }
 
 func scan() {
@@ -57,7 +59,7 @@ func scan() {
 					if r.Request.URL.RawQuery != "" {
 						resultOutput.Url = TruncateString(r.Request.URL.Scheme + "://" + r.Request.URL.Host + r.Request.URL.Path + "?" + r.Request.URL.RawQuery)
 					} else {
-						resultOutput.Url = TruncateString(r.Request.URL.Scheme + "://" +r.Request.URL.Host + r.Request.URL.Path)
+						resultOutput.Url = TruncateString(r.Request.URL.Scheme + "://" + r.Request.URL.Host + r.Request.URL.Path)
 					}
 
 					resultOutput.Reqbody = TruncateString(string(r.Request.Body))
@@ -78,6 +80,7 @@ func scan() {
 					} else {
 						resultOutput.Result = scanR.Res
 						resultOutput.Reason = scanR.Reason
+						resultOutput.Confidence = scanR.Confidence
 						jsonData, err := json.Marshal(resultOutput)
 						if err != nil {
 							log.Fatalf("Error marshaling to JSON: %v", err)
