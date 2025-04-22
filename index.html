@@ -274,15 +274,15 @@
                 <div class="filters">
                     <select class="filter-select" id="filter-type">
                         <option value="all">所有漏洞类型</option>
-                        <option value="vulnerable">漏洞请求</option>
+                        <option value="true">漏洞请求</option>
                         <option value="unknown">未知状态</option>
-                        <option value="safe">安全请求</option>
+                        <option value="false">安全请求</option>
                     </select>
                     <select class="filter-select" id="filter-result">
                         <option value="all">所有检测结果</option>
-                        <option value="vulnerable">漏洞请求</option>
+                        <option value="true">漏洞请求</option>
                         <option value="unknown">未知状态</option>
-                        <option value="safe">安全请求</option>
+                        <option value="false">安全请求</option>
                     </select>
                     <button class="filter-btn" onclick="filterData()">筛选</button>
                 </div>
@@ -455,20 +455,20 @@
             
             // 根据筛选条件过滤数据
             if (filterType !== 'all') {
-                if (filterType === 'vulnerable') {
-                    currentData = originalData.filter(item => item.result === true);
+                if (filterType === 'true') {
+                    currentData = originalData.filter(item => item.result === 'true');
                 } else if (filterType === 'unknown') {
                     currentData = originalData.filter(item => item.result === 'unknown');
-                } else if (filterType === 'safe') {
-                    currentData = originalData.filter(item => item.result === false);
+                } else if (filterType === 'false') {
+                    currentData = originalData.filter(item => item.result === 'false');
                 }
             } else if (filterResult !== 'all') {
-                if (filterResult === 'vulnerable') {
-                    currentData = originalData.filter(item => item.result === true);
+                if (filterResult === 'true') {
+                    currentData = originalData.filter(item => item.result === 'true');
                 } else if (filterResult === 'unknown') {
                     currentData = originalData.filter(item => item.result === 'unknown');
-                } else if (filterResult === 'safe') {
-                    currentData = originalData.filter(item => item.result === false);
+                } else if (filterResult === 'false') {
+                    currentData = originalData.filter(item => item.result === 'false');
                 }
             } else {
                 currentData = [...originalData];
