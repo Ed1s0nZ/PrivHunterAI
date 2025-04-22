@@ -412,7 +412,7 @@
                     <td>${item.reqbody || '-'}</td>
                     <td>${item.respBodyA || '-'}</td>
                     <td>${item.respBodyB || '-'}</td>
-                    <td>${item.result === 'unknown' ? '未知' : item.result ? '漏洞' : '安全'}</td>
+                    <td>${item.result === 'unknown' ? '未知' : item.result=== 'false' ? '安全' : '漏洞'}</td>
                     <td>${item.reason || '-'}</td>
                     <td>${item.confidence || '-'}</td>
                 `;
