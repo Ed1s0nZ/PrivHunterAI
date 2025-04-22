@@ -398,11 +398,11 @@
                 const row = document.createElement('tr');
                 
                 // 根据结果类型设置行样式
-                if (item.result === true) {
+                if (item.result === 'true') {
                     row.className = 'vulnerable-row';
                 } else if (item.result === 'unknown') {
                     row.className = 'unknown-row';
-                } else if (item.result === false) {
+                } else if (item.result === 'false') {
                     row.className = 'safe-row';
                 }
                 
