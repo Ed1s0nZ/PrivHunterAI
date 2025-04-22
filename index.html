@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PrivHunterAI</title>
-    <!-- 由于网络原因，Bootstrap 和 Font Awesome 的 CDN 链接可能无法正常加载 -->
-    <!-- 如果需要使用这些资源，建议检查网络连接或使用其他可靠的 CDN 链接 -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- 引入 Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- 引入 Font Awesome 图标库 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
         body {
@@ -22,6 +22,17 @@
             color: white;
             position: relative;
             overflow: hidden;
+        }
+
+        .header::after {
+            content: "";
+            position: absolute;
+            bottom: -50px;
+            right: -50px;
+            width: 300px;
+            height: 300px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
         }
 
         .header h1 {
@@ -158,16 +169,16 @@
         .data-table th {
             padding: 1.5rem;
             text-align: center;
-            max-width: 150px;
             vertical-align: middle;
+            max-width: 150px;
             word-wrap: break-word;
             border-bottom: 0.1rem solid #e0e0e0;
         }
         .data-table td {
             padding: 1.5rem;
             text-align: center;
-            max-width: 150px;
             vertical-align: middle;
+            max-width: 150px;
             word-wrap: break-word;
             border-bottom: 0.1rem solid #e0e0e0;
         }
@@ -224,22 +235,6 @@
             padding: 5px 10px;
             border-radius: 5px;
             border: 1px solid #ddd;
-        }
-
-        /* 展开详情样式 */
-        .details-expander {
-            cursor: pointer;
-            color: #4a90e2;
-        }
-        .details-panel {
-            display: none;
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-radius: 5px;
-            margin-top: 10px;
-        }
-        .details-panel.active {
-            display: block;
         }
     </style>
 </head>
@@ -298,10 +293,12 @@
                     <tr>
                         <th>Method</th>
                         <th>URL</th>
+                        <th>Reqbody</th>
+                        <th>RespBodyA</th>
+                        <th>RespBodyB</th>
                         <th>Result</th>
                         <th>Reason</th>
                         <th>Confidence</th>
-                        <th>操作</th>
                     </tr>
                 </thead>
                 <tbody id="data-body">
@@ -387,7 +384,7 @@
             if (paginatedData.length === 0) {
                 const emptyRow = document.createElement('tr');
                 emptyRow.innerHTML = `
-                    <td colspan="6" class="empty-state">
+                    <td colspan="8" class="empty-state">
                         <i class="fas fa-search"></i>
                         <p>没有找到符合条件的数据</p>
                     </td>
@@ -410,21 +407,14 @@
                 }
                 
                 row.innerHTML = `
-                    <td>${item.method || '-'}</td>
-                    <td>${item.url || '-'}</td>
-                    <td>${item.result === 'unknown' ? '未知' : item.result === 'false' ? '安全' : '漏洞'}</td>
-                    <td>${item.reason || '-'}</td>
-                    <td>${item.confidence || '-'}</td>
-                    <td>
-                        <div class="details-expander" onclick="toggleDetails(this)">
-                            <i class="fas fa-chevron-down"></i> 展开详情
-                        </div>
-                        <div class="details-panel">
-                            <strong>请求体：</strong>${item.reqbody || '-'}<br>
-                            <strong>响应体A：</strong>${item.respBodyA || '-'}<br>
-                            <strong>响应体B：</strong>${item.respBodyB || '-'}
-                        </div>
-                    </td>
+                    <td>${item.method || ''}</td>
+                    <td>${item.url || ''}</td>
+                    <td>${item.reqbody || ''}</td>
+                    <td>${item.respBodyA || ''}</td>
+                    <td>${item.respBodyB || ''}</td>
+                    <td>${item.result === 'unknown' ? '未知' : item.result=== 'false' ? '安全' : '漏洞'}</td>
+                    <td>${item.reason || ''}</td>
+                    <td>${item.confidence || ''}</td>
                 `;
                 tableBody.appendChild(row);
             });
@@ -490,18 +480,6 @@
             // 更新表格数据和分页信息
             updateTableData();
             updatePagination();
-        }
-
-        // 切换详情面板的显示状态
-        function toggleDetails(element) {
-            const panel = element.nextElementSibling;
-            if (panel.classList.contains('active')) {
-                panel.classList.remove('active');
-                element.innerHTML = '<i class="fas fa-chevron-down"></i> 展开详情';
-            } else {
-                panel.classList.add('active');
-                element.innerHTML = '<i class="fas fa-chevron-up"></i> 收起详情';
-            }
         }
 
         // 初始化时尝试获取数据
