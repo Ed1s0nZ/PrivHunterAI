@@ -3,167 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PrivHunterAI</title>
+    <title>AIFuzzing</title>
     <!-- 引入 Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- 引入 Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
         body {
-            padding: 3rem;
+            padding: 20px;
             background: linear-gradient(135deg, #f8f9fa, #e9ecef);
             font-family: 'Roboto', sans-serif;
-            overflow-x: hidden; /* 禁止横向滑动 */
         }
 
-        .container {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 3rem;
-            border-radius: 1rem;
-            box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .container:hover {
-            transform: translateY(-0.2rem);
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 2rem;
-        }
-
-        .shield {
+        .header {
+            background: linear-gradient(135deg, #4a90e2, #1f78d1);
+            border-radius: 10px;
+            padding: 30px;
+            color: white;
             position: relative;
-            width: 120px;
-            height: 160px;
-            background: linear-gradient(145deg, #4a90e2, #1f78d1);
-            clip-path: polygon(50% 100%, 100% 75%, 100% 15%, 50% 0%, 0% 15%, 0% 75%);
-            box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.1);
-            animation: glow 3s ease-in-out infinite;
+            overflow: hidden;
         }
 
-        @keyframes glow {
-            0%, 100% {
-                box-shadow: 0 0.4rem 0.8rem rgba(255, 165, 0, 0.08);
-            }
-            50% {
-                box-shadow: 0 0.4rem 0.8rem rgba(255, 165, 0, 0.2);
-            }
-        }
-
-        .ai {
+        .header::after {
+            content: "";
             position: absolute;
-            top: 33%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-weight: bold;
-            font-size: 1.8rem;
-            text-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.1);
-            color: white;
-        }
-
-        .magnifying-glass {
-            position: absolute;
-            bottom: 4rem;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 5rem;
-            height: 5rem;
-            border: 0.5rem solid #fff;
+            bottom: -50px;
+            right: -50px;
+            width: 300px;
+            height: 300px;
+            background: rgba(255,255,255,0.1);
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.3));
         }
 
-        .logo-text {
-            font-size: 3rem;
+        .header h1 {
+            font-size: 2.5rem;
             font-weight: bold;
-            color: #333;
-            margin-left: 2rem;
-            text-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.1);
+            margin-bottom: 5px;
         }
 
-        h1 {
-            color: #333;
-            margin-bottom: 2rem;
+        .header p {
+            font-size: 1rem;
+            opacity: 0.9;
         }
 
-        .btn {
-            margin-right: 1rem;
-            transition: transform 0.3s ease;
-        }
-
-        .btn:hover {
-            transform: scale(1.05);
-        }
-
-        .btn-primary {
-            background: linear-gradient(45deg, #66bb6a, #26a69a);
-            border-radius: 0.5rem;
-            box-shadow: 0 0.3rem 0.6rem rgba(0, 0, 0, 0.1);
-        }
-
-        .btn-primary:hover {
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-        }
-
-        .btn-success {
-            background: linear-gradient(45deg, #00e0ff, #005691);
-            border-radius: 0.5rem;
-            box-shadow: 0 0.3rem 0.6rem rgba(0, 0, 0, 0.1);
-        }
-
-        .btn-success:hover {
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-        }
-
-        .form-control {
+        .refresh-btn {
+            background: white;
+            color: #4a90e2;
+            border-radius: 5px;
+            padding: 8px 20px;
             border: none;
-            border-bottom: 0.15rem solid #66bb6a;
-            border-radius: 0;
-            padding: 0.5rem 1rem;
-            background: transparent;
+            font-size: 0.9rem;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
-        .form-control:focus {
-            border-bottom-color: #26a69a;
-            box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
+        .stats-container {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            flex: 1;
+            background: white;
+            border-radius: 10px;
+            padding: 25px 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .total .stat-number { color: #4a90e2; }
+        .vulnerable .stat-number { color: #e74c3c; }
+        .unknown .stat-number { color: #f39c12; }
+        .safe .stat-number { color: #2ecc71; }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .results-section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .filter-select {
+            padding: 8px 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            margin-right: 10px;
             outline: none;
+            transition: all 0.3s ease;
+        }
+        .filter-select:focus {
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
         }
 
-        .input-group-append button {
-            background: linear-gradient(45deg, #00e0ff, #005691);
-            border: none;
-            border-radius: 0.5rem;
-            padding: 0.5rem 1.5rem;
+        .filter-btn {
+            background: #4a90e2;
             color: white;
-            box-shadow: 0 0.3rem 0.6rem rgba(0, 0, 0, 0.1);
-            transition: background 0.3s ease;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .filter-btn:hover {
+            background: #3a7bc8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(74, 144, 226, 0.3);
         }
 
-        .input-group-append button:hover {
-            background: linear-gradient(45deg, #00c8ff, #004b7c);
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #666;
         }
 
-        .table-responsive {
-            max-height: 80vh;
-            overflow-y: auto;
-            overflow-x: auto;
-            padding: 2rem;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 1rem;
+        .empty-state i {
+            font-size: 50px;
+            color: #f39c12;
+            margin-bottom: 20px;
         }
 
-        table {
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 30px;
+        }
+
+        /* 表格样式 */
+        .data-table {
             width: 100%;
-            margin-top: 2rem;
-            border: 0.1rem solid #d1d1d1;
-            border-collapse: separate;
-            border-spacing: 0.5rem;
-            box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
+            border-collapse: collapse;
         }
-
-        th, td {
+        .data-table th {
             padding: 1.5rem;
             text-align: center;
             vertical-align: middle;
@@ -171,72 +174,122 @@
             word-wrap: break-word;
             border-bottom: 0.1rem solid #e0e0e0;
         }
-
-        th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .ellipsis {
-            cursor: pointer;
-            color: #00b8d4;
-            text-decoration: underline;
-        }
-
-        .header__background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            clip-path: polygon(50% 100%, 100% 75%, 100% 15%, 50% 0%, 0% 15%, 0% 75%);
-            background: linear-gradient(145deg, #81c784, #00897b);
-            transform-origin: center;
-            animation: rotation 10s infinite linear;
-            opacity: 0.5;
-            z-index: -1;
-        }
-
-        @keyframes rotation {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(359deg); }
-        }
-
-        footer {
+        .data-table td {
+            padding: 1.5rem;
             text-align: center;
-            padding: 1rem 0;
-            margin-top: 2rem;
-            color: #888;
+            vertical-align: middle;
+            max-width: 150px;
+            word-wrap: break-word;
+            border-bottom: 0.1rem solid #e0e0e0;
+        }
+        .data-table tr:hover {
+            background-color: rgba(0,0,0,0.02);
+        }
+        .vulnerable-row {
+            background-color: rgba(231, 76, 60, 0.1);
+        }
+        .unknown-row {
+            background-color: rgba(243, 156, 18, 0.1);
+        }
+        .safe-row {
+            background-color: rgba(46, 204, 113, 0.1);
+        }
+
+        /* 分页样式 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .pagination button {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 8px 15px;
+            margin: 0 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        .pagination button:hover {
+            background: #e9ecef;
+        }
+        .pagination button.active {
+            background: #4a90e2;
+            color: white;
+            border-color: #4a90e2;
+        }
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .page-info {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            color: #666;
+        }
+        .page-info select {
+            margin: 0 10px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Logo 部分 -->
-        <div class="logo-container">
-            <div class="shield">
-                <div class="ai">AI</div>
-                <div class="magnifying-glass"></div>
-                <div class="header__background"></div>
-            </div>
-            <div class="logo-text">PrivHunterAI</div>
+        <!-- Header Section -->
+        <div class="header">
+            <h1>PrivHunterAI <small>v1.0.0</small></h1>
+            <p>高级API安全扫描工具，智能检测未授权访问和越权漏洞</p>
+            <button class="refresh-btn" onclick="fetchData()">刷新数据</button>
         </div>
 
-        <!-- 工具内容 -->
-        <h1 class="mb-4">扫描结果</h1>
-        <button class="btn btn-primary" onclick="fetchData()">Fetch Data</button>
-        <button class="btn btn-success" onclick="filterData()">Filter Data</button>
-        <div class="input-group mb-3 mt-3">
-            <input type="text" class="form-control" id="filterResult" placeholder="Enter result value">
-            <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button" onclick="filterData()">Filter</button>
+        <!-- Statistics Cards -->
+        <div class="stats-container">
+            <div class="stat-card total">
+                <div class="stat-number" id="total-requests">0</div>
+                <div class="stat-label">总扫描请求</div>
+            </div>
+            <div class="stat-card vulnerable">
+                <div class="stat-number" id="vulnerable-requests">0</div>
+                <div class="stat-label">漏洞请求</div>
+            </div>
+            <div class="stat-card unknown">
+                <div class="stat-number" id="unknown-requests">0</div>
+                <div class="stat-label">未知状态</div>
+            </div>
+            <div class="stat-card safe">
+                <div class="stat-number" id="safe-requests">0</div>
+                <div class="stat-label">安全请求</div>
             </div>
         </div>
-        <!-- 使用 table-responsive 包裹表格 -->
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped">
-                <thead class="thead-light">
+
+        <!-- Results Section -->
+        <div class="results-section">
+            <div class="results-header">
+                <h3>漏洞扫描结果</h3>
+                <div class="filters">
+                    <select class="filter-select" id="filter-type">
+                        <option value="all">所有漏洞类型</option>
+                        <option value="vulnerable">漏洞请求</option>
+                        <option value="unknown">未知状态</option>
+                        <option value="safe">安全请求</option>
+                    </select>
+                    <select class="filter-select" id="filter-result">
+                        <option value="all">所有检测结果</option>
+                        <option value="vulnerable">漏洞请求</option>
+                        <option value="unknown">未知状态</option>
+                        <option value="safe">安全请求</option>
+                    </select>
+                    <button class="filter-btn" onclick="filterData()">筛选</button>
+                </div>
+            </div>
+
+            <table class="data-table">
+                <thead>
                     <tr>
                         <th>Method</th>
                         <th>URL</th>
@@ -248,63 +301,190 @@
                         <th>Confidence</th>
                     </tr>
                 </thead>
-                <tbody id="dataTable">
+                <tbody id="data-body">
+                    <!-- 表格数据将通过 JavaScript 动态添加 -->
                 </tbody>
             </table>
+
+            <!-- 分页控制 -->
+            <div class="pagination" id="pagination">
+                <button onclick="prevPage()" id="prev-btn" disabled>上一页</button>
+                <span id="page-info">第 1 页，共 1 页</span>
+                <button onclick="nextPage()" id="next-btn" disabled>下一页</button>
+            </div>
         </div>
     </div>
 
-    <!-- 引入 Bootstrap 和 jQuery -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <footer>
+        © 2025 PrivHunterAI - 高级API安全扫描工具 | 面向未来的安全检测
+    </footer>
+
     <script>
+        // 原始数据存储
+        let originalData = [];
+        // 当前显示的数据
+        let currentData = [];
+        // 分页相关变量
+        let currentPage = 1;
+        let itemsPerPage = 10;
+        let totalPages = 1;
+
         async function fetchData() {
-            const response = await fetch('/data');
-            const data = await response.json();
-            displayData(data);
+            try {
+                // 从你的接口获取数据
+                const response = await fetch('/data');
+                if (!response.ok) throw new Error('Network response was not ok');
+                originalData = await response.json();
+                currentData = [...originalData];
+                
+                // 更新统计信息
+                updateStatistics();
+                
+                // 更新分页信息
+                updatePagination();
+                
+                // 更新表格数据
+                updateTableData();
+                
+            } catch (error) {
+                console.error('Failed to fetch data:', error);
+                alert('加载数据失败，请重试');
+                // 清空表格
+                document.getElementById('data-body').innerHTML = '';
+            }
         }
 
-        async function filterData() {
-            const filterValue = document.getElementById('filterResult').value;
-            const response = await fetch('/filter', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ result: filterValue })
-            });
-            const data = await response.json();
-            displayData(data);
+        function updateStatistics() {
+            // 更新总数据统计
+            document.getElementById('total-requests').textContent = originalData.length;
+            
+            // 计算漏洞请求 (Result为true)
+            const vulnerableRequests = originalData.filter(item => item.result === "true").length;
+            document.getElementById('vulnerable-requests').textContent = vulnerableRequests;
+
+            // 计算未知状态 (Result为unknown)
+            const unknownRequests = originalData.filter(item => item.result === 'unknown').length;
+            document.getElementById('unknown-requests').textContent = unknownRequests;
+
+            // 计算安全请求 (Result为false)
+            const safeRequests = originalData.filter(item => item.result === "false").length;
+            document.getElementById('safe-requests').textContent = safeRequests;
         }
 
-        function displayData(data) {
-            const tableBody = document.querySelector('#dataTable');
+        function updateTableData() {
+            const tableBody = document.getElementById('data-body');
             tableBody.innerHTML = '';
-            data.forEach(item => {
+            
+            // 计算当前页面的数据范围
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = Math.min(startIndex + itemsPerPage, currentData.length);
+            const paginatedData = currentData.slice(startIndex, endIndex);
+            
+            // 如果没有数据，显示空状态
+            if (paginatedData.length === 0) {
+                const emptyRow = document.createElement('tr');
+                emptyRow.innerHTML = `
+                    <td colspan="8" class="empty-state">
+                        <i class="fas fa-search"></i>
+                        <p>没有找到符合条件的数据</p>
+                    </td>
+                `;
+                tableBody.appendChild(emptyRow);
+                return;
+            }
+            
+            // 渲染当前页面的数据
+            paginatedData.forEach(item => {
                 const row = document.createElement('tr');
+                
+                // 根据结果类型设置行样式
+                if (item.result === true) {
+                    row.className = 'vulnerable-row';
+                } else if (item.result === 'unknown') {
+                    row.className = 'unknown-row';
+                } else if (item.result === false) {
+                    row.className = 'safe-row';
+                }
+                
                 row.innerHTML = `
-                    <td>${item.method}</td>
-                    <td class="ellipsis" data-full-text="${item.url}">${item.url}</td>
-                    <td>${item.reqbody}</td>
-                    <td>${item.respBodyA}</td>
-                    <td>${item.respBodyB}</td>
-                    <td>${item.result}</td>
-                    <td>${item.reason}</td>
-                    <td>${item.confidence}</td>
+                    <td>${item.method || '-'}</td>
+                    <td>${item.url || '-'}</td>
+                    <td>${item.reqbody || '-'}</td>
+                    <td>${item.respBodyA || '-'}</td>
+                    <td>${item.respBodyB || '-'}</td>
+                    <td>${item.result === 'unknown' ? '未知' : item.result ? '漏洞' : '安全'}</td>
+                    <td>${item.reason || '-'}</td>
+                    <td>${item.confidence || '-'}</td>
                 `;
                 tableBody.appendChild(row);
             });
         }
 
-        // 折叠长文本的交互逻辑
+        function updatePagination() {
+            // 计算总页数
+            totalPages = Math.ceil(currentData.length / itemsPerPage);
+            
+            // 更新页码显示
+            document.getElementById('page-info').textContent = 
+                `第 ${currentPage} 页，共 ${totalPages} 页`;
+            
+            // 更新按钮状态
+            document.getElementById('prev-btn').disabled = currentPage === 1;
+            document.getElementById('next-btn').disabled = currentPage === totalPages;
+        }
+
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                updateTableData();
+                updatePagination();
+            }
+        }
+
+        function nextPage() {
+            if (currentPage < totalPages) {
+                currentPage++;
+                updateTableData();
+                updatePagination();
+            }
+        }
+
+        function filterData() {
+            const filterType = document.getElementById('filter-type').value;
+            const filterResult = document.getElementById('filter-result').value;
+            
+            // 根据筛选条件过滤数据
+            if (filterType !== 'all') {
+                if (filterType === 'vulnerable') {
+                    currentData = originalData.filter(item => item.result === true);
+                } else if (filterType === 'unknown') {
+                    currentData = originalData.filter(item => item.result === 'unknown');
+                } else if (filterType === 'safe') {
+                    currentData = originalData.filter(item => item.result === false);
+                }
+            } else if (filterResult !== 'all') {
+                if (filterResult === 'vulnerable') {
+                    currentData = originalData.filter(item => item.result === true);
+                } else if (filterResult === 'unknown') {
+                    currentData = originalData.filter(item => item.result === 'unknown');
+                } else if (filterResult === 'safe') {
+                    currentData = originalData.filter(item => item.result === false);
+                }
+            } else {
+                currentData = [...originalData];
+            }
+            
+            // 重置页码
+            currentPage = 1;
+            
+            // 更新表格数据和分页信息
+            updateTableData();
+            updatePagination();
+        }
+
+        // 初始化时尝试获取数据
         document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.ellipsis').forEach(element => {
-                element.addEventListener('click', () => {
-                    const fullText = element.getAttribute('data-full-text');
-                    alert(`Full Host: ${fullText}`);
-                });
-            });
+            fetchData();
         });
     </script>
 </body>
