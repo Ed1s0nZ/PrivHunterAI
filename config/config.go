@@ -37,19 +37,20 @@ var Prompt = `
     },
     "analysis_flow": {
         "preprocessing": [
-            "STEP 1. **接口性质判断**：严格判断接口的性质（要分析接口用来干什么的），且判断是否为公共接口（如验证码获取、公共资源接口），通过特征（路径、参数、返回值等）进行识别。",
+            "STEP 1. **接口性质判断**：严格判断接口的性质（要分析接口用来干什么的，接口或请求体中是否包含身份字段），且判断是否为公共接口（如验证码获取、公共资源接口），通过特征（路径、参数、返回值等）进行识别。",
             "STEP 2. **动态字段处理**：根据字段内容，进行自主分析，自动过滤动态字段（如 request_id 、 timestamp 、 nonce 等）。"
         ],
         "core_logic": {
             "快速判定通道（优先级从高到低）": [
-                "1. **非越权行为**：若 responseB.status_code 为403或401 → 判断为无越权行为（ false ）。",
-                "2. **非越权行为**：若 responseB 为空（ null 、 [] 、 {} ），且 responseA 有数据 → 判断为无越权行为（ false ）。",
-                "3. **非越权行为**：若 responseB 与 responseA 关键字段（如 data.id 、 user_id 、 account_number 等）不一致，且是账号B的相关信息 → 判断为无越权行为（ false ）。",
-                "4. **越权行为**：若 responseB 与 responseA 关键字段（如 data.id 、 user_id 、 account_number 等）完全一致，且未发现账号B相关信息 → 判断为越权行为（ true ）。",
-                "5. **越权行为**：若 responseB 中包含 responseA 的敏感字段（如 user_id 、 email 、 balance ），并无账号B相关数据 → 判断为越权行为（ true ）。",
-                "6. **越权行为**：若 responseB 数据完全为账号A的数据 → 判断为越权行为（ true ）。",
-                "7. **无法判断**：若既不符合非越权行为标准，又不符合越权行为标准 → 无法判断（ unknown ）。",
-                "8. **无法判断**：若 responseB.status_code 为500，或返回异常数据（如加密或乱码） → 无法判断（ unknown ）。"
+                "1. **非越权行为（Result返回false）**：若 responseB.status_code 为403或401时，判断为无越权行为（ false ）。",
+                "2. **非越权行为（Result返回false）**：若 responseB 为空（ null 、 [] 、 {} ），且 responseA 有数据时，判断为无越权行为（ false ）。",
+                "3. **非越权行为（Result返回false）**：如果不是公共接口，且 responseB 与 responseA 关键字段（如 data.id 、 user_id 、 account_number 等）不一致时（这里是不一致，注意），判断为无越权行为（ false ）。",
+                "4. **越权行为（Result返回True）**：如果不是公共接口，且 responseB 与 responseA 关键字段（如 data.id 、 user_id 、 account_number 等）完全一致时，判断为越权行为（ true ）。",
+                "5. **越权行为（Result返回True）**：如果不是公共接口，且 responseB 与 responseA 完全一致 → 判断为越权行为（ true ）。",
+                "6. **越权行为（Result返回True）**：若 responseB 中包含 responseA 的敏感字段（如 user_id 、 email 、 balance ），并无账号B相关数据时，判断为越权行为（ true ）。",
+                "7. **越权行为（Result返回True）**：若 responseB 数据完全为账号A的数据 → 判断为越权行为（ true ）。",
+                "8. **无法判断（Result返回Unknown）**：若既不符合非越权行为标准，又不符合越权行为标准时，无法判断（ unknown ）。",
+                "9. **无法判断（Result返回Unknown）**：若 responseB.status_code 为500，或返回异常数据（如加密或乱码）时，无法判断（ unknown ）。"
             ],
             "深度分析模式（快速通道未触发时执行）": {
                 "结构对比": [
@@ -66,16 +67,18 @@ var Prompt = `
     },
     "decision_tree": {
         "true": [
-            "1. 接口为非公共接口，且结构相似度 > 80% → 判断为越权（ res: true ）。",
-            "2. 关键业务字段（如订单号、用户ID、手机号等）的值和层级完全一致 → 判断为越权（ res: true ）。",
-            "3.  responseB 与 responseA 字段完全一致，且均为账号A的数据，未出现账号B相关信息 → 判断为越权（ res: true ）。",
-            "4. 操作类接口返回 success: true 且结构相同（如修改密码成功） → 判断为越权（ res: true ）。",
-            "5.  responseB 中包含账号A的敏感字段（如 password 、 token ），且未出现账号B的信息 → 判断为越权（ res: true ）。"
+            "1. 满足快速判定通道的越权行为 → 判断为越权（ res: true ）。",
+            "2. 接口为非公共接口，且结构相似度 > 80% → 判断为越权（ res: true ）。",
+            "3. 关键业务字段（如订单号、用户ID、手机号等）的值和层级完全一致 → 判断为越权（ res: true ）。",
+            "4.  responseB 与 responseA 字段完全一致，且均为账号A的数据，未出现账号B相关信息 → 判断为越权（ res: true ）。",
+            "5. 操作类接口返回 success: true 且结构相同（如修改密码成功） → 判断为越权（ res: true ）。",
+            "6.  responseB 中包含账号A的敏感字段（如 password 、 token ），且未出现账号B的信息 → 判断为越权（ res: true ）。"
         ],
         "false": [
-            "1. 接口为公共接口（如验证码获取、公共资源接口） → 判断为非越权（ res: false ）。",
-            "2. 结构差异显著（字段缺失率 > 30%） → 判断为非越权（ res: false ）。",
-            "3. 关键业务字段（如订单号、用户ID、手机号等）的值或层级不一致 → 判断为非越权（ res: false ）。"
+            "1. 不满足快速判定通道的越权行为 → 判断为非越权（ res: false ）。",
+            "2. 接口为公共接口（如验证码获取、公共资源接口） → 判断为非越权（ res: false ）。",
+            "3. 结构差异显著（字段缺失率 > 30%） → 判断为非越权（ res: false ）。",
+            "4. 关键业务字段（如订单号、用户ID、手机号等）的值或层级不一致 → 判断为非越权（ res: false ）。"
         ],
         "unknown": [
             "1. 不满足 true 和 false 条件的情况 → 无法判断（ res: unknown ）。",
