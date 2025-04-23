@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PrivHunterAI</title>
-    <!-- 引入 Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- 引入 Font Awesome 图标库 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
         body {
@@ -185,14 +183,77 @@
         .data-table tr:hover {
             background-color: rgba(0,0,0,0.02);
         }
-        .vulnerable-row {
-            background-color: rgba(231, 76, 60, 0.1);
+
+        .foldable-row {
+            cursor: pointer;
         }
-        .unknown-row {
-            background-color: rgba(243, 156, 18, 0.1);
+
+        .foldable-row .result-summary {
+            display: flex;
+            align-items: center;
         }
-        .safe-row {
-            background-color: rgba(46, 204, 113, 0.1);
+
+        .foldable-row .result-url {
+            text-align: left;
+            font-weight: bold;
+            word-wrap: break-word;
+            max-width: 600px;
+            margin-right: 15px;
+            flex-grow: 1;
+            
+        }
+
+        .foldable-row .result-status {
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .status-vulnerable {
+            background-color: #ffebee;
+            color: #e53935;
+        }
+
+        .status-safe {
+            background-color: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .status-unknown {
+            background-color: #fff8e1;
+            color: #ffa000;
+        }
+
+        .foldable-row .result-confidence {
+            margin-left: 10px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .details-row {
+            display: none;
+            padding-left: 20px;
+        }
+
+        .details-row table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .details-row table td {
+            padding: 8px 0;
+            vertical-align: top;
+        }
+
+        .details-row table td:first-child {
+            font-weight: bold;
+            width: 120px;
+        }
+
+        .details-row.active {
+            display: table-row;
         }
 
         /* 分页样式 */
@@ -291,14 +352,7 @@
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th>Method</th>
-                        <th>URL</th>
-                        <th>Reqbody</th>
-                        <th>RespBodyA</th>
-                        <th>RespBodyB</th>
-                        <th>Result</th>
-                        <th>Reason</th>
-                        <th>Confidence</th>
+                        <!-- <th colspan="2">扫描结果</th> -->
                     </tr>
                 </thead>
                 <tbody id="data-body">
@@ -331,8 +385,8 @@
 
         async function fetchData() {
             try {
-                // 从你的接口获取数据
-                const response = await fetch('/data');
+                 // 从你的接口获取数据
+                 const response = await fetch('/data');
                 if (!response.ok) throw new Error('Network response was not ok');
                 originalData = await response.json();
                 currentData = [...originalData];
@@ -384,7 +438,7 @@
             if (paginatedData.length === 0) {
                 const emptyRow = document.createElement('tr');
                 emptyRow.innerHTML = `
-                    <td colspan="8" class="empty-state">
+                    <td colspan="2" class="empty-state">
                         <i class="fas fa-search"></i>
                         <p>没有找到符合条件的数据</p>
                     </td>
@@ -395,28 +449,87 @@
             
             // 渲染当前页面的数据
             paginatedData.forEach(item => {
-                const row = document.createElement('tr');
+                // 创建折叠行
+                const foldableRow = document.createElement('tr');
+                foldableRow.className = 'foldable-row';
+                foldableRow.onclick = function() {
+                    const detailsRow = this.nextElementSibling;
+                    if (detailsRow.classList.contains('active')) {
+                        detailsRow.classList.remove('active');
+                        this.style.fontWeight = 'normal';
+                    } else {
+                        detailsRow.classList.add('active');
+                        this.style.fontWeight = 'bold';
+                    }
+                };
                 
                 // 根据结果类型设置行样式
                 if (item.result === 'true') {
-                    row.className = 'vulnerable-row';
+                    foldableRow.style.borderLeft = '4px solid #e74c3c';
                 } else if (item.result === 'unknown') {
-                    row.className = 'unknown-row';
+                    foldableRow.style.borderLeft = '4px solid #f39c12';
                 } else if (item.result === 'false') {
-                    row.className = 'safe-row';
+                    foldableRow.style.borderLeft = '4px solid #2ecc71';
                 }
                 
-                row.innerHTML = `
-                    <td>${item.method || ''}</td>
-                    <td>${item.url || ''}</td>
-                    <td>${item.reqbody || ''}</td>
-                    <td>${item.respBodyA || ''}</td>
-                    <td>${item.respBodyB || ''}</td>
-                    <td>${item.result === 'unknown' ? '未知' : item.result=== 'false' ? '安全' : '漏洞'}</td>
-                    <td>${item.reason || ''}</td>
-                    <td>${item.confidence || ''}</td>
+                foldableRow.innerHTML = `
+                    <td>
+                        <div class="result-summary">
+                            <span class="result-url">${item.url.split('?')[0]}</span>
+                            <span class="result-status status-${item.result === 'true' ? 'vulnerable' : item.result === 'unknown' ? 'unknown' : 'safe'}">
+                                ${item.result === 'true' ? '漏洞' : item.result === 'unknown' ? '未知' : '安全'}
+                            </span>
+                            <span class="result-confidence">${item.confidence}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <i class="fas fa-chevron-down"></i>
+                    </td>
                 `;
-                tableBody.appendChild(row);
+                tableBody.appendChild(foldableRow);
+                
+                // 创建详情行
+                const detailsRow = document.createElement('tr');
+                detailsRow.className = 'details-row';
+                detailsRow.innerHTML = `
+                    <td colspan="2">
+                        <table>
+                            <tr>
+                                <td>Method:</td>
+                                <td>${item.method || ''}</td>
+                            </tr>
+                            <tr>
+                                <td>URL:</td>
+                                <td>${item.url || ''}</td>
+                            </tr>
+                            <tr>
+                                <td>Reqbody:</td>
+                                <td>${item.reqbody || ''}</td>
+                            </tr>
+                            <tr>
+                                <td>RespBodyA:</td>
+                                <td>${item.respBodyA || ''}</td>
+                            </tr>
+                            <tr>
+                                <td>RespBodyB:</td>
+                                <td>${item.respBodyB || ''}</td>
+                            </tr>
+                            <tr>
+                                <td>Result:</td>
+                                <td>${item.result === 'unknown' ? '未知' : item.result === 'false' ? '安全' : '漏洞'}</td>
+                            </tr>
+                            <tr>
+                                <td>Reason:</td>
+                                <td>${item.reason || ''}</td>
+                            </tr>
+                            <tr>
+                                <td>Confidence:</td>
+                                <td>${item.confidence || ''}</td>
+                            </tr>
+                        </table>
+                    </td>
+                `;
+                tableBody.appendChild(detailsRow);
             });
         }
 
