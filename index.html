@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PrivHunterAI</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
         body {
@@ -140,8 +140,7 @@
         }
 
         .empty-state {
-
-            text-align: right;
+            text-align: center;
             padding: 50px 20px;
             color: #666;
         }
@@ -201,7 +200,6 @@
             max-width: 550px;
             margin-right: 15px;
             flex-grow: 1;
-            
         }
 
         .foldable-row .result-status {
@@ -334,14 +332,8 @@
             <div class="results-header">
                 <h3>漏洞扫描结果</h3>
                 <div class="filters">
-                    <select class="filter-select" id="filter-type">
-                        <option value="all">所有漏洞类型</option>
-                        <option value="true">漏洞请求</option>
-                        <option value="unknown">未知状态</option>
-                        <option value="false">安全请求</option>
-                    </select>
                     <select class="filter-select" id="filter-result">
-                        <option value="all">所有检测结果</option>
+                        <option value="">所有状态</option>
                         <option value="true">漏洞请求</option>
                         <option value="unknown">未知状态</option>
                         <option value="false">安全请求</option>
@@ -353,7 +345,7 @@
             <table class="data-table">
                 <thead>
                     <tr>
-                        <!-- <th colspan="2">扫描结果</th> -->
+                        <th colspan="2">扫描结果</th>
                     </tr>
                 </thead>
                 <tbody id="data-body">
@@ -363,6 +355,13 @@
 
             <!-- 分页控制 -->
             <div class="pagination" id="pagination">
+                <select id="page-size">
+                    <option value="5">5 条/页</option>
+                    <option value="10" selected>10 条/页</option>
+                    <option value="20">20 条/页</option>
+                    <option value="50">50 条/页</option>
+                    <option value="100">100 条/页</option>
+                </select>
                 <button onclick="prevPage()" id="prev-btn" disabled>上一页</button>
                 <span id="page-info">第 1 页，共 1 页</span>
                 <button onclick="nextPage()" id="next-btn" disabled>下一页</button>
@@ -375,68 +374,52 @@
     </footer>
 
     <script>
-        // 原始数据存储
-        let originalData = [];
-        // 当前显示的数据
-        let currentData = [];
         // 分页相关变量
         let currentPage = 1;
         let itemsPerPage = 10;
         let totalPages = 1;
+        let currentData = [];
 
-        async function fetchData() {
+        async function fetchData(page = 1, pageSize = itemsPerPage, resultFilter = '') {
             try {
-                 // 从你的接口获取数据
-                 const response = await fetch('/data');
-                if (!response.ok) throw new Error('Network response was not ok');
-                originalData = await response.json();
-                currentData = [...originalData];
+                document.body.style.cursor = 'wait';
                 
-                // 更新统计信息
-                updateStatistics();
+                // 获取统计数据
+                const statsResponse = await fetch('/stats');
+                if (!statsResponse.ok) throw new Error('Failed to fetch statistics');
+                const stats = await statsResponse.json();
+                updateStatistics(stats);
                 
-                // 更新分页信息
-                updatePagination();
+                // 获取分页数据
+                const dataResponse = await fetch(`/data?page=${page}&pageSize=${pageSize}&result=${resultFilter}`);
+                if (!dataResponse.ok) throw new Error('Failed to fetch data');
+                const data = await dataResponse.json();
+                currentData = data.data;
                 
-                // 更新表格数据
+                currentPage = data.currentPage;
+                itemsPerPage = data.pageSize;
+                totalPages = data.totalPages;
+                
                 updateTableData();
+                updatePaginationControls();
                 
-            } catch (error) {
-                console.error('Failed to fetch data:', error);
-                alert('加载数据失败，请重试');
-                // 清空表格
-                document.getElementById('data-body').innerHTML = '';
+            }  finally {
+                document.body.style.cursor = 'default';
             }
         }
 
-        function updateStatistics() {
-            // 更新总数据统计
-            document.getElementById('total-requests').textContent = originalData.length;
-            
-            // 计算漏洞请求 (Result为true)
-            const vulnerableRequests = originalData.filter(item => item.result === "true").length;
-            document.getElementById('vulnerable-requests').textContent = vulnerableRequests;
-
-            // 计算未知状态 (Result为unknown)
-            const unknownRequests = originalData.filter(item => item.result === 'unknown').length;
-            document.getElementById('unknown-requests').textContent = unknownRequests;
-
-            // 计算安全请求 (Result为false)
-            const safeRequests = originalData.filter(item => item.result === "false").length;
-            document.getElementById('safe-requests').textContent = safeRequests;
+        function updateStatistics(stats) {
+            document.getElementById('total-requests').textContent = stats.total;
+            document.getElementById('vulnerable-requests').textContent = stats.vulnerable;
+            document.getElementById('unknown-requests').textContent = stats.unknown;
+            document.getElementById('safe-requests').textContent = stats.safe;
         }
 
         function updateTableData() {
             const tableBody = document.getElementById('data-body');
             tableBody.innerHTML = '';
             
-            // 计算当前页面的数据范围
-            const startIndex = (currentPage - 1) * itemsPerPage;
-            const endIndex = Math.min(startIndex + itemsPerPage, currentData.length);
-            const paginatedData = currentData.slice(startIndex, endIndex);
-            
-            // 如果没有数据，显示空状态
-            if (paginatedData.length === 0) {
+            if (currentData.length === 0) {
                 const emptyRow = document.createElement('tr');
                 emptyRow.innerHTML = `
                     <td colspan="2" class="empty-state">
@@ -448,23 +431,15 @@
                 return;
             }
             
-            // 渲染当前页面的数据
-            paginatedData.forEach(item => {
-                // 创建折叠行
+            currentData.forEach(item => {
                 const foldableRow = document.createElement('tr');
                 foldableRow.className = 'foldable-row';
                 foldableRow.onclick = function() {
                     const detailsRow = this.nextElementSibling;
-                    if (detailsRow.classList.contains('active')) {
-                        detailsRow.classList.remove('active');
-                        this.style.fontWeight = 'normal';
-                    } else {
-                        detailsRow.classList.add('active');
-                        this.style.fontWeight = 'bold';
-                    }
+                    detailsRow.classList.toggle('active');
+                    this.style.fontWeight = detailsRow.classList.contains('active') ? 'bold' : 'normal';
                 };
                 
-                // 根据结果类型设置行样式
                 if (item.result === 'true') {
                     foldableRow.style.borderLeft = '4px solid #e74c3c';
                 } else if (item.result === 'unknown') {
@@ -489,7 +464,6 @@
                 `;
                 tableBody.appendChild(foldableRow);
                 
-                // 创建详情行
                 const detailsRow = document.createElement('tr');
                 detailsRow.className = 'details-row';
                 detailsRow.innerHTML = `
@@ -534,69 +508,36 @@
             });
         }
 
-        function updatePagination() {
-            // 计算总页数
-            totalPages = Math.ceil(currentData.length / itemsPerPage);
-            
-            // 更新页码显示
+        function updatePaginationControls() {
             document.getElementById('page-info').textContent = 
                 `第 ${currentPage} 页，共 ${totalPages} 页`;
             
-            // 更新按钮状态
             document.getElementById('prev-btn').disabled = currentPage === 1;
             document.getElementById('next-btn').disabled = currentPage === totalPages;
         }
 
         function prevPage() {
             if (currentPage > 1) {
-                currentPage--;
-                updateTableData();
-                updatePagination();
+                fetchData(currentPage - 1, itemsPerPage, document.getElementById('filter-result').value);
             }
         }
 
         function nextPage() {
             if (currentPage < totalPages) {
-                currentPage++;
-                updateTableData();
-                updatePagination();
+                fetchData(currentPage + 1, itemsPerPage, document.getElementById('filter-result').value);
             }
         }
 
         function filterData() {
-            const filterType = document.getElementById('filter-type').value;
-            const filterResult = document.getElementById('filter-result').value;
-            
-            // 根据筛选条件过滤数据
-            if (filterType !== 'all') {
-                if (filterType === 'true') {
-                    currentData = originalData.filter(item => item.result === 'true');
-                } else if (filterType === 'unknown') {
-                    currentData = originalData.filter(item => item.result === 'unknown');
-                } else if (filterType === 'false') {
-                    currentData = originalData.filter(item => item.result === 'false');
-                }
-            } else if (filterResult !== 'all') {
-                if (filterResult === 'true') {
-                    currentData = originalData.filter(item => item.result === 'true');
-                } else if (filterResult === 'unknown') {
-                    currentData = originalData.filter(item => item.result === 'unknown');
-                } else if (filterResult === 'false') {
-                    currentData = originalData.filter(item => item.result === 'false');
-                }
-            } else {
-                currentData = [...originalData];
-            }
-            
-            // 重置页码
-            currentPage = 1;
-            
-            // 更新表格数据和分页信息
-            updateTableData();
-            updatePagination();
+            const resultFilter = document.getElementById('filter-result').value;
+            fetchData(1, itemsPerPage, resultFilter);
         }
 
-        // 初始化时尝试获取数据
+        document.getElementById('page-size').addEventListener('change', function() {
+            itemsPerPage = parseInt(this.value);
+            fetchData(1, itemsPerPage, document.getElementById('filter-result').value);
+        });
+
         document.addEventListener('DOMContentLoaded', () => {
             fetchData();
         });
