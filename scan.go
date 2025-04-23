@@ -16,9 +16,11 @@ import (
 )
 
 type Result struct {
-	Method     string `json:"method"`
-	Url        string `json:"url"` // JSON 标签用于自定义字段名
-	Reqbody    string `json:"reqbody"`
+	Method string `json:"method"`
+	Url    string `json:"url"` // JSON 标签用于自定义字段名
+	// Reqbody    string `json:"reqbody"`
+	RequestA   string `json:"requestA"`
+	RequestB   string `json:"requestB"`
 	RespBodyA  string `json:"respBodyA"`
 	RespBodyB  string `json:"respBodyB"`
 	Result     string `json:"result"`
@@ -48,7 +50,7 @@ func scan() {
 			//
 			if r.Request.Header != nil && r.Response.Header != nil && r.Response.Body != nil && r.Response.StatusCode == 200 {
 				// fmt.Println(r)
-				result, resp1, resp2, err := sendHTTPAndKimi(r) // 主要
+				result, req1, req2, resp1, resp2, err := sendHTTPAndKimi(r) // 主要
 				if err != nil {
 					logs.Delete(key)
 					// fmt.Println(r)
@@ -62,8 +64,19 @@ func scan() {
 						resultOutput.Url = TruncateString(r.Request.URL.Scheme + "://" + r.Request.URL.Host + r.Request.URL.Path)
 					}
 
-					resultOutput.Reqbody = TruncateString(string(r.Request.Body))
+					// resultOutput.Reqbody = TruncateString(string(r.Request.Body))
 					resultOutput.RespBodyA = TruncateString(resp1)
+					httpRequest1, err := generateHTTPRequest(req1)
+					if err != nil {
+						fmt.Println("Error，httpRequest:", err)
+					}
+					httpRequest2, err := generateHTTPRequest(req2)
+					if err != nil {
+						fmt.Println("Error，httpRequest:", err)
+					}
+
+					resultOutput.RequestA = httpRequest1
+					resultOutput.RequestB = httpRequest2
 					resultOutput.RespBodyB = TruncateString(resp2)
 					//
 
@@ -117,12 +130,12 @@ func scan() {
 	}
 }
 
-func sendHTTPAndKimi(r *RequestResponseLog) (result string, respA string, respB string, err error) {
-
+func sendHTTPAndKimi(r *RequestResponseLog) (result, reqA, reqB, respA, respB string, err error) {
+	r.Request.Header.Add("Host", r.Request.URL.Host)
 	jsonDataReq, err := json.Marshal(r.Request)
 	if err != nil {
 		fmt.Println("Error marshaling:", err)
-		return "", "", "", err // 返回错误
+		return "", "", "", "", "", err // 返回错误
 	}
 	req1 := string(jsonDataReq)
 
@@ -134,12 +147,14 @@ func sendHTTPAndKimi(r *RequestResponseLog) (result string, respA string, respB 
 		Path:     r.Request.URL.Path,
 		RawQuery: r.Request.URL.RawQuery,
 	}
+
+	// 达成这些要求进行越权扫描
 	if isNotSuffix(r.Request.URL.Path, config.GetConfig().Suffixes) && !containsString(r.Response.Header.Get("Content-Type"), config.GetConfig().AllowedRespHeaders) {
 		log.Println("ReqA:", req1)
 		req, err := http.NewRequest(r.Request.Method, fullURL.String(), strings.NewReader(string(r.Request.Body)))
 		if err != nil {
 			fmt.Println("创建请求失败:", err)
-			return "", "", "", err
+			return "", "", "", "", "", err // 返回错误
 		}
 		req.Header = r.Request.Header
 		// 增加其他头 2025 02 27
@@ -163,7 +178,7 @@ func sendHTTPAndKimi(r *RequestResponseLog) (result string, respA string, respB 
 		jsonDataReq2, err := json.Marshal(requestInfo2)
 		if err != nil {
 			fmt.Println("Error marshaling:", err)
-			return "", "", "", err // 返回错误
+			return "", "", "", "", "", err // 返回错误
 		}
 		req2 := string(jsonDataReq2)
 		log.Println("ReqB:", req2)
@@ -171,13 +186,13 @@ func sendHTTPAndKimi(r *RequestResponseLog) (result string, respA string, respB 
 		resp, err := client.Do(req)
 		if err != nil {
 			fmt.Println("请求失败:", err)
-			return "", "", "", err
+			return "", "", "", "", "", err // 返回错误
 		}
 		defer resp.Body.Close()
 		bodyBytes, err := io.ReadAll(resp.Body)
 		if err != nil {
 			fmt.Println("Error reading response body:", err)
-			return "", "", "", err
+			return "", "", "", "", "", err // 返回错误
 		}
 		// 将响应体转换为字符串
 		resp2 := string(bodyBytes)
@@ -200,20 +215,20 @@ func sendHTTPAndKimi(r *RequestResponseLog) (result string, respA string, respB 
 
 				if detectErr != nil {
 					fmt.Println("Error after retries:", detectErr)
-					return "", "", "", detectErr
+					return "", "", "", "", "", detectErr
 				}
 
-				return resultDetect, resp1, resp2, nil
+				return resultDetect, req1, req2, resp1, resp2, nil
 			} else {
-				return `{"res": "false", "reason": "匹配到关键字，判断为无越权（未消耗AI tokens）"}`, resp1, resp2, nil
+				return `{"res": "false", "reason": "匹配到关键字，判断为无越权（未消耗AI tokens）"}`, req1, req2, resp1, resp2, nil
 			}
 
 		} else {
-			return `{"res": "white", "reason": "请求包太大"}`, resp1, resp2, nil
+			return `{"res": "white", "reason": "请求包太大"}`, req1, req2, resp1, resp2, nil
 		}
 
 	}
-	return `{"res": "white", "reason": "白名单后缀或白名单Content-Type接口"}`, resp1, "", nil
+	return `{"res": "white", "reason": "白名单后缀或白名单Content-Type接口"}`, req1, "", resp1, "", nil
 }
 
 func detectPrivilegeEscalation(AI string, reqA, resp1, resp2, statusB string) (string, error) {
