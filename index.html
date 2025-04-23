@@ -174,7 +174,7 @@
         }
         .data-table td {
             padding: 1.5rem;
-            text-align: center;
+            text-align: left;
             vertical-align: middle;
             max-width: 150px;
             word-wrap: break-word;
@@ -231,8 +231,10 @@
         }
 
         .details-row {
+            white-space: pre-line;
             display: none;
             padding-left: 20px;
+            
         }
 
         .details-row table {
@@ -478,12 +480,16 @@
                                 <td>${item.url || ''}</td>
                             </tr>
                             <tr>
-                                <td>Reqbody:</td>
-                                <td>${item.reqbody || ''}</td>
+                                <td>RequestA:</td>
+                                <td>${item.requestA || ''}</td>
                             </tr>
                             <tr>
                                 <td>RespBodyA:</td>
                                 <td>${item.respBodyA || ''}</td>
+                            </tr>
+                            <tr>
+                                <td>RequestB:</td>
+                                <td>${item.requestB || ''}</td>
                             </tr>
                             <tr>
                                 <td>RespBodyB:</td>
