@@ -1,7 +1,10 @@
 package main
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
+	"net/url"
 	"regexp"
 	"strings"
 )
@@ -114,4 +117,79 @@ func GeneratePattern(keywords []string) string {
 	pattern.WriteString(strings.Join(keywords, "|"))
 	pattern.WriteString(")")
 	return pattern.String()
+}
+
+type HTTPRequest struct {
+	Method string `json:"Method"`
+	URL    struct {
+		Path     string `json:"Path"`
+		RawQuery string `json:"RawQuery"`
+	} `json:"URL"`
+	Proto  string              `json:"Proto"`
+	Header map[string][]string `json:"Header"`
+	Body   string              `json:"Body"`
+}
+
+func generateHTTPRequest(input string) (string, error) {
+	var req HTTPRequest
+	err := json.Unmarshal([]byte(input), &req)
+	if err != nil {
+		return "", fmt.Errorf("failed to parse JSON: %v", err)
+	}
+
+	// 构建 URL
+	var urlString string
+	if req.URL.Path != "" {
+		urlString = req.URL.Path
+	}
+	if req.URL.RawQuery != "" {
+		urlString += "?" + req.URL.RawQuery
+	}
+
+	// 构建请求行
+	requestLine := fmt.Sprintf("%s %s %s", req.Method, urlString, req.Proto)
+
+	// 构建 Header
+	var headerLines []string
+	for key, values := range req.Header {
+		if len(values) > 0 {
+			// 将多个值用逗号分隔
+			headerLines = append(headerLines, fmt.Sprintf("%s: %s", key, strings.Join(values, ",")))
+		}
+	}
+
+	// 特殊处理 Origin 和 Referer
+	if val, ok := req.Header["Origin"]; ok && len(val) > 0 {
+		origin := val[0]
+		parsedOrigin, err := url.Parse(origin)
+		if err == nil {
+			headerLines = append(headerLines, fmt.Sprintf("Origin: %s", parsedOrigin.String()))
+		}
+	}
+
+	if val, ok := req.Header["Referer"]; ok && len(val) > 0 {
+		referer := val[0]
+		parsedReferer, err := url.Parse(referer)
+		if err == nil {
+			headerLines = append(headerLines, fmt.Sprintf("Referer: %s", parsedReferer.String()))
+		}
+	}
+
+	// 如果 Body 不为空，计算 Content-Length
+	if req.Body != "" {
+		contentLength := len(req.Body)
+		headerLines = append(headerLines, fmt.Sprintf("Content-Length: %d", contentLength))
+	}
+
+	// 构建最终的 HTTP 请求字符串
+	var buffer bytes.Buffer
+	buffer.WriteString(requestLine + "\n")
+	for _, line := range headerLines {
+		buffer.WriteString(line + "\n")
+	}
+	if req.Body != "" {
+		buffer.WriteString("\n" + req.Body)
+	}
+	fmt.Println(buffer.String())
+	return buffer.String(), nil
 }
