@@ -87,7 +87,7 @@ var Prompt = `
         "json": {
             "res": "结果为 true 、 false 或 unknown 。",
             "reason": "提供详细的分析过程和判断依据。",
-            "confidence": "结果的可信度（百分比,string类型）。"
+            "confidence": "结果的可信度（百分比,string类型,需要加百分号）。"
         }
     },
     "notes": [
