@@ -44,8 +44,8 @@ var Prompt = `
             "快速判定通道（优先级从高到低）": [
                 "1. **非越权行为（Result返回false）**：若 responseB.status_code 为403或401时，判断为无越权行为（ false ）。",
                 "2. **非越权行为（Result返回false）**：若 responseB 为空（ null 、 [] 、 {} ），且 responseA 有数据时，判断为无越权行为（ false ）。",
-                "3. **非越权行为（Result返回false）**：如果不是公共接口，且 responseB 与 responseA 关键字段（如 data.id 、 user_id 、 account_number 等）不一致时（这里是不一致，注意），判断为无越权行为（ false ）。",
-                "4. **越权行为（Result返回True）**：如果不是公共接口，且 responseB 与 responseA 关键字段（如 data.id 、 user_id 、 account_number 等）完全一致时，判断为越权行为（ true ）。",
+                "3. **非越权行为（Result返回false）**：如果不是公共接口，且 responseB 与 responseA 关键字段（如 data.id 、 user_id 、 account_number 等）不一致时（这里是不一致，注意，*非常重要，需仔细对比！*），判断为无越权行为（ false ）。",
+                "4. **越权行为（Result返回True）**：如果不是公共接口，且 responseB 与 responseA 关键字段（如 data.id 、 user_id 、 account_number 等）完全一致时（这里是完全一致（但不包括随机字符串或时间戳等动态字符），*非常重要，需仔细对比！*），判断为越权行为（ true ）。",
                 "5. **越权行为（Result返回True）**：如果不是公共接口，且 responseB 与 responseA 完全一致 → 判断为越权行为（ true ）。",
                 "6. **越权行为（Result返回True）**：若 responseB 中包含 responseA 的敏感字段（如 user_id 、 email 、 balance ），并无账号B相关数据时，判断为越权行为（ true ）。",
                 "7. **越权行为（Result返回True）**：若 responseB 数据完全为账号A的数据 → 判断为越权行为（ true ）。",
