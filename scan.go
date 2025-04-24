@@ -249,7 +249,7 @@ func detectPrivilegeEscalation(AI string, reqA, resp1, resp2, statusB string) (s
 		apikey := config.GetConfig().APIKeys.DeepSeek
 		result, err = aiapis.AIScan(model, aiurl, apikey, reqA, resp1, resp2, statusB) // 调用 kimi 检测是否越权
 	case "qianwen":
-		model := "qwen-turbo"
+		model := "qwen-plus"
 		aiurl := "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"
 		apikey := config.GetConfig().APIKeys.Qianwen
 		result, err = aiapis.AIScan(model, aiurl, apikey, reqA, resp1, resp2, statusB) // 调用 kimi 检测是否越权
