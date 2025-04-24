@@ -38,17 +38,17 @@ var Prompt = `
     "analysis_flow": {
         "preprocessing": [
             "STEP 1. **接口性质判断**：严格判断接口的性质（要分析接口用来干什么的，接口或请求体中是否包含身份字段），且判断是否为公共接口（如验证码获取、公共资源接口），通过特征（路径、参数、返回值等）进行识别。",
-            "STEP 2. **动态字段处理**：根据字段内容，进行自主分析，自动过滤动态字段（如 request_id 、 timestamp 、 nonce 等）。"
+            "STEP 2. **动态字段处理**：根据字段内容，进行自主分析，再做判断前自动过滤动态字段（如 request_id 、 timestamp 、 nonce 等）的干扰。"
         ],
         "core_logic": {
             "快速判定通道（优先级从高到低）": [
-                "1. **非越权行为（Result返回false）**：若 responseB.status_code 为403或401时，判断为无越权行为（ false ）。",
-                "2. **非越权行为（Result返回false）**：若 responseB 为空（ null 、 [] 、 {} ），且 responseA 有数据时，判断为无越权行为（ false ）。",
-                "3. **非越权行为（Result返回false）**：如果不是公共接口，且 responseB 与 responseA 关键字段（如 data.id 、 user_id 、 account_number 等）不一致时（这里是不一致，注意，*非常重要，需仔细对比！*），判断为无越权行为（ false ）。",
-                "4. **越权行为（Result返回True）**：如果不是公共接口，且 responseB 与 responseA 关键字段（如 data.id 、 user_id 、 account_number 等）完全一致时（这里是完全一致（但不包括随机字符串或时间戳等动态字符），*非常重要，需仔细对比！*），判断为越权行为（ true ）。",
-                "5. **越权行为（Result返回True）**：如果不是公共接口，且 responseB 与 responseA 完全一致 → 判断为越权行为（ true ）。",
-                "6. **越权行为（Result返回True）**：若 responseB 中包含 responseA 的敏感字段（如 user_id 、 email 、 balance ），并无账号B相关数据时，判断为越权行为（ true ）。",
-                "7. **越权行为（Result返回True）**：若 responseB 数据完全为账号A的数据 → 判断为越权行为（ true ）。",
+                "1. **越权行为（Result返回True）**：若 responseB 与 responseA 关键字段（如 data.id 、 user_id 、 account_number 等，动态字段不在参考范围）完全一致时，判断为越权行为（ true ）。",
+                "2. **越权行为（Result返回True）**：若 responseB 与 responseA 完全一致 → 判断为越权行为（ true ）。",
+                "3. **越权行为（Result返回True）**：若 responseB 中包含 responseA 的敏感字段（如 user_id 、 email 、 balance ），并无账号B相关数据时，判断为越权行为（ true ）。",
+                "4. **越权行为（Result返回True）**：若 responseB 数据完全为账号A的数据 → 判断为越权行为（ true ）。",
+                "5. **非越权行为（Result返回false）**：若 responseB.status_code 为403或401时，判断为无越权行为（ false ）。",
+                "6. **非越权行为（Result返回false）**：若 responseB 为空（ null 、 [] 、 {} ），且 responseA 有数据时，判断为无越权行为（ false ）。",
+                "7. **非越权行为（Result返回false）**：若 responseB 与 responseA 关键字段（如 data.id 、 user_id 、 account_number 等，动态字段不在参考范围）不一致时，判断为无越权行为（ false ）。",
                 "8. **无法判断（Result返回Unknown）**：若既不符合非越权行为标准，又不符合越权行为标准时，无法判断（ unknown ）。",
                 "9. **无法判断（Result返回Unknown）**：若 responseB.status_code 为500，或返回异常数据（如加密或乱码）时，无法判断（ unknown ）。"
             ],
