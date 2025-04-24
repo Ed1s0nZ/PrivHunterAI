@@ -26,6 +26,7 @@ type Result struct {
 	Result     string `json:"result"`
 	Reason     string `json:"reason"`
 	Confidence string `json:"confidence"`
+	Timestamp  string `json:"timestamp"`
 }
 
 // 扫描结果
@@ -94,6 +95,7 @@ func scan() {
 						resultOutput.Result = scanR.Res
 						resultOutput.Reason = scanR.Reason
 						resultOutput.Confidence = scanR.Confidence
+						resultOutput.Timestamp = time.Now().Format("2006-01-02 15:04:05")
 						jsonData, err := json.Marshal(resultOutput)
 						if err != nil {
 							log.Fatalf("Error marshaling to JSON: %v", err)
