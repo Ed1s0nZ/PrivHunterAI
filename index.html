@@ -166,7 +166,7 @@
         }
         .data-table th {
             padding: 1.5rem;
-            text-align: center;
+            text-align: left;
             vertical-align: middle;
             max-width: 150px;
             word-wrap: break-word;
@@ -200,14 +200,7 @@
             margin-right: 15px;
             flex-grow: 1;
         }
-        .foldable-row .fa-chevron-down{
-            text-align: right;
-            /* font-weight: bold; */
-            /* word-wrap: break-word; */
-            /* max-width: 550px; */
-            margin-right: 10px;
-            /* flex-grow: 1;  */
-        }
+
 
         .foldable-row .result-status {
             padding: 4px 10px;
@@ -217,32 +210,32 @@
         }
 
         .status-vulnerable {
-            margin-left: 100px;
+            /* margin-left: 100px; */
             background-color: #ffebee;
             color: #e53935;
         }
 
         .status-safe {
-            margin-left: 100px;
+            /* margin-left: 100px; */
             background-color: #e8f5e9;
             color: #388e3c;
         }
 
         .status-unknown {
-            margin-left: 100px;
+            /* margin-left: 100px; */
             background-color: #fff8e1;
             color: #ffa000;
         }
 
         .foldable-row .result-confidence {
-            margin-left: 50px;
+            margin-left: 20px;
             font-size: 0.9rem;
             color: #666;
         }
 
 
         .foldable-row .result-timestamp {
-            margin-right: 50px;
+            margin-right: 100px;
             font-size: 0.9rem;
             color: #666;
         }
@@ -362,6 +355,13 @@
             </div>
 
             <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>API 地址</th>
+                        <th>状态信息</th>
+                        <th>时间戳</th>
+                    </tr>
+                </thead>
                 <tbody id="data-body">
                     <!-- 表格数据将通过 JavaScript 动态添加 -->
                 </tbody>
@@ -477,7 +477,7 @@
                         </div>
                     </td>
                     <td>
-                        <div class="fa-chevron-down">
+                        <div class="result-summary">
                             <span class="result-timestamp">${item.timestamp}</span>
                         <i class="fas fa-chevron-down"></i>
                          </div>
