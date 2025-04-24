@@ -222,15 +222,15 @@ func sendHTTPAndKimi(r *RequestResponseLog) (result, reqA, reqB, respA, respB st
 
 				return resultDetect, req1, req2, resp1, resp2, nil
 			} else {
-				return `{"res": "false", "reason": "匹配到关键字，判断为无越权（未消耗AI tokens）"}`, req1, req2, resp1, resp2, nil
+				return `{"res": "false", "reason": "匹配到关键字，判断为无越权（未消耗AI tokens）","confidence":"100%"}`, req1, req2, resp1, resp2, nil
 			}
 
 		} else {
-			return `{"res": "white", "reason": "请求包太大"}`, req1, req2, resp1, resp2, nil
+			return `{"res": "white", "reason": "请求包太大","confidence":"100%"}`, req1, req2, resp1, resp2, nil
 		}
 
 	}
-	return `{"res": "white", "reason": "白名单后缀或白名单Content-Type接口"}`, req1, "", resp1, "", nil
+	return `{"res": "white", "reason": "白名单后缀或白名单Content-Type接口","confidence":"100%"}`, req1, "", resp1, "", nil
 }
 
 func detectPrivilegeEscalation(AI string, reqA, resp1, resp2, statusB string) (string, error) {
