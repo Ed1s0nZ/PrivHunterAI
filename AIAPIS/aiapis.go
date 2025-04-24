@@ -105,8 +105,8 @@ func AIScan(model, aiurl, apikey, reqA, respA, respB, statusB string) (string, e
 				Content: string(inputJSON),
 			},
 		},
-		Temperature: 0.7,
-		MaxTokens:   500,
+		Temperature: 0.5,
+		MaxTokens:   1000,
 	}
 
 	response, err := CreateChatCompletion(request, aiurl, apikey)
