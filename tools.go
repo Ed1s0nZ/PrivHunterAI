@@ -192,6 +192,5 @@ func generateHTTPRequest(input string) (string, error) {
 	} else {
 		buffer.WriteString("\n\n")
 	}
-	fmt.Println(buffer.String())
 	return buffer.String(), nil
 }
