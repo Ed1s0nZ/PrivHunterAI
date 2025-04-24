@@ -192,7 +192,6 @@
             display: flex;
             align-items: center;
         }
-
         .foldable-row .result-url {
             text-align: left;
             font-weight: bold;
@@ -200,6 +199,14 @@
             max-width: 550px;
             margin-right: 15px;
             flex-grow: 1;
+        }
+        .foldable-row .fa-chevron-down{
+            text-align: right;
+            /* font-weight: bold; */
+            /* word-wrap: break-word; */
+            /* max-width: 550px; */
+            margin-right: 10px;
+            /* flex-grow: 1;  */
         }
 
         .foldable-row .result-status {
@@ -210,22 +217,32 @@
         }
 
         .status-vulnerable {
+            margin-left: 100px;
             background-color: #ffebee;
             color: #e53935;
         }
 
         .status-safe {
+            margin-left: 100px;
             background-color: #e8f5e9;
             color: #388e3c;
         }
 
         .status-unknown {
+            margin-left: 100px;
             background-color: #fff8e1;
             color: #ffa000;
         }
 
         .foldable-row .result-confidence {
-            margin-left: 10px;
+            margin-left: 50px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+
+        .foldable-row .result-timestamp {
+            margin-right: 50px;
             font-size: 0.9rem;
             color: #666;
         }
@@ -345,11 +362,6 @@
             </div>
 
             <table class="data-table">
-                <thead>
-                    <tr>
-                        <th colspan="2">扫描结果</th>
-                    </tr>
-                </thead>
                 <tbody id="data-body">
                     <!-- 表格数据将通过 JavaScript 动态添加 -->
                 </tbody>
@@ -424,7 +436,7 @@
             if (currentData.length === 0) {
                 const emptyRow = document.createElement('tr');
                 emptyRow.innerHTML = `
-                    <td colspan="2" class="empty-state">
+                    <td colspan="3" class="empty-state">
                         <i class="fas fa-search"></i>
                         <p>没有找到符合条件的数据</p>
                     </td>
@@ -454,6 +466,10 @@
                     <td>
                         <div class="result-summary">
                             <span class="result-url">${item.url.split('?')[0]}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="result-summary">
                             <span class="result-status status-${item.result === 'true' ? 'vulnerable' : item.result === 'unknown' ? 'unknown' : 'safe'}">
                                 ${item.result === 'true' ? '漏洞' : item.result === 'unknown' ? '未知' : '安全'}
                             </span>
@@ -461,7 +477,10 @@
                         </div>
                     </td>
                     <td>
+                        <div class="fa-chevron-down">
+                            <span class="result-timestamp">${item.timestamp}</span>
                         <i class="fas fa-chevron-down"></i>
+                         </div>
                     </td>
                 `;
                 tableBody.appendChild(foldableRow);
@@ -469,7 +488,7 @@
                 const detailsRow = document.createElement('tr');
                 detailsRow.className = 'details-row';
                 detailsRow.innerHTML = `
-                    <td colspan="2">
+                    <td colspan="3">
                         <table>
                             <tr>
                                 <td>Method:</td>
