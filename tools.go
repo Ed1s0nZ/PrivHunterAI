@@ -194,3 +194,66 @@ func generateHTTPRequest(input string) (string, error) {
 	}
 	return buffer.String(), nil
 }
+
+// Levenshtein 计算两个字符串的Levenshtein距离
+func Levenshtein(a, b string) int {
+	lenA := len(a)
+	lenB := len(b)
+	if lenA == 0 {
+		return lenB
+	}
+	if lenB == 0 {
+		return lenA
+	}
+
+	// 创建距离矩阵
+	dist := make([][]int, lenA+1)
+	for i := range dist {
+		dist[i] = make([]int, lenB+1)
+		dist[i][0] = i
+	}
+	for j := 0; j <= lenB; j++ {
+		dist[0][j] = j
+	}
+
+	// 填充距离矩阵
+	for i := 1; i <= lenA; i++ {
+		for j := 1; j <= lenB; j++ {
+			cost := 1
+			if a[i-1] == b[j-1] {
+				cost = 0
+			}
+			dist[i][j] = min(
+				dist[i-1][j]+1,      // 删除
+				dist[i][j-1]+1,      // 插入
+				dist[i-1][j-1]+cost, // 替换
+			)
+		}
+	}
+
+	return dist[lenA][lenB]
+}
+
+// min 返回三个整数中的最小值
+func min(a, b, c int) int {
+	if a < b {
+		if a < c {
+			return a
+		}
+		return c
+	}
+	if b < c {
+		return b
+	}
+	return c
+}
+
+// StringSimilarity 计算两个字符串的相似度 (0-1之间)
+func StringSimilarity(a, b string) float64 {
+	distance := Levenshtein(a, b)
+	maxLength := len(a)
+	if len(b) > maxLength {
+		maxLength = len(b)
+	}
+	return 1.0 - float64(distance)/float64(maxLength)
+}
