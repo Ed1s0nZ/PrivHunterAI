@@ -320,7 +320,7 @@
             text-align: left;
             font-weight: bold;
             word-wrap: break-word;
-            max-width: 350px;
+            max-width: 500px;
             margin-right: 15px;
             flex-grow: 1;
             font-size: 0.9rem;
@@ -360,7 +360,7 @@
 
 
         .foldable-row .result-timestamp {
-            margin-right: 100px;
+            margin-right: 50px;
             font-size: 0.9rem;
             color: #666;
         }
@@ -494,9 +494,9 @@
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th>API 地址</th>
-                        <th>状态信息</th>
-                        <th>时间戳</th>
+                        <th style="width: 50%;">API 地址</th>
+                        <th style="width: 25%;">状态信息</th>
+                        <th style="width: 25%;">时间戳</th>
                     </tr>
                 </thead>
                 <tbody id="data-body">
@@ -616,7 +616,7 @@
                     <td>
                         <div class="result-summary">
                             <span class="result-timestamp">${item.timestamp}</span>
-                        <i class="fas fa-chevron-down"></i>
+                        <span>&#9662;</span>
                          </div>
                     </td>
                 `;
