@@ -197,7 +197,7 @@ func sendHTTPAndKimi(r *RequestResponseLog) (result, reqA, reqB, respA, respB st
 		// 将响应体转换为字符串
 		resp2 := string(bodyBytes)
 
-		if len(resp1+resp2) < 65535 {
+		if len(resp1+resp2) < 1048576 {
 			if !MatchString(config.GetConfig().RespBodyBWhiteList, resp2) {
 				similarity := StringSimilarity(resp1, resp2)
 				if similarity > 0.5 {
