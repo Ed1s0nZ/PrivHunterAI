@@ -199,30 +199,34 @@ func sendHTTPAndKimi(r *RequestResponseLog) (result, reqA, reqB, respA, respB st
 
 		if len(resp1+resp2) < 65535 {
 			if !MatchString(config.GetConfig().RespBodyBWhiteList, resp2) {
-				// 初始值
-				var resultDetect string
-				var detectErr error
-				maxRetries := 5
-				for i := 0; i < maxRetries; i++ {
-					resultDetect, detectErr = detectPrivilegeEscalation(config.GetConfig().AI, req1, resp1, resp2, resp.Status)
-					if detectErr == nil {
-						break // 成功退出循环
+				similarity := StringSimilarity(resp1, resp2)
+				if similarity > 0.5 {
+					// 初始值
+					var resultDetect string
+					var detectErr error
+					maxRetries := 5
+					for i := 0; i < maxRetries; i++ {
+						resultDetect, detectErr = detectPrivilegeEscalation(config.GetConfig().AI, req1, resp1, resp2, resp.Status)
+						if detectErr == nil {
+							break // 成功退出循环
+						}
+						// 可选：增加延迟避免频繁请求
+						fmt.Println("AI分析异常，重试中，异常原因：", detectErr)
+						time.Sleep(5 * time.Second) // 1秒延迟
 					}
-					// 可选：增加延迟避免频繁请求
-					fmt.Println("AI分析异常，重试中，异常原因：", detectErr)
-					time.Sleep(5 * time.Second) // 1秒延迟
-				}
 
-				if detectErr != nil {
-					fmt.Println("Error after retries:", detectErr)
-					return "", "", "", "", "", detectErr
-				}
+					if detectErr != nil {
+						fmt.Println("Error after retries:", detectErr)
+						return "", "", "", "", "", detectErr
+					}
 
-				return resultDetect, req1, req2, resp1, resp2, nil
+					return resultDetect, req1, req2, resp1, resp2, nil
+				} else {
+					return `{"res": "false", "reason": "相似度小于0.5(` + fmt.Sprint(similarity) + `)，判断为未越权（未消耗AI tokens）","confidence":"100%"}`, req1, req2, resp1, resp2, nil
+				}
 			} else {
 				return `{"res": "false", "reason": "匹配到关键字，判断为无越权（未消耗AI tokens）","confidence":"100%"}`, req1, req2, resp1, resp2, nil
 			}
-
 		} else {
 			return `{"res": "white", "reason": "请求包太大","confidence":"100%"}`, req1, req2, resp1, resp2, nil
 		}
