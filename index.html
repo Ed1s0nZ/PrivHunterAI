@@ -4,66 +4,195 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PrivHunterAI</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
         body {
+            max-width: 1200px;
             padding: 20px;
+            margin: 0 auto;
             background: linear-gradient(135deg, #f8f9fa, #e9ecef);
             font-family: 'Roboto', sans-serif;
         }
 
+        /* 头部区域 - 增强的未来科技风格 */
         .header {
-            background: linear-gradient(135deg, #4a90e2, #1f78d1);
-            border-radius: 10px;
-            padding: 30px;
-            color: white;
             position: relative;
+            border-radius: 15px;
+            padding: 35px;
+            color: white;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1a6bd0, #4a90e2);
+            box-shadow: 0 10px 30px rgba(26, 107, 208, 0.3);
+        }
+
+        /* 网格背景效果 */
+        .grid-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+            z-index: 0;
+        }
+
+        /* 六边形图案 */
+        .hexagon-pattern {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
             overflow: hidden;
         }
-
-        .header::after {
-            content: "";
+        .hexagon {
             position: absolute;
-            bottom: -50px;
-            right: -50px;
-            width: 300px;
-            height: 300px;
+            width: 60px;
+            height: 60px;
             background: rgba(255,255,255,0.1);
-            border-radius: 50%;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            animation: float 8s infinite ease-in-out;
         }
 
+        /* 粒子效果 */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+            animation: particle-move 15s infinite linear;
+        }
+
+        /* 发光线条效果 */
+        .glow-lines {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.2;
+        }
+        .glow-line {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: glow-move 8s infinite linear;
+        }
+
+        /* 标题样式 */
         .header h1 {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #ffffff, #a8d8ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+            position: relative;
+            display: inline-block;
+            z-index: 3;
+            animation: pulse 3s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% {
+                text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+            }
+            50% {
+                text-shadow: 0 0 25px rgba(255, 255, 255, 0.7), 0 0 35px rgba(255, 255, 255, 0.5);
+            }
+            100% {
+                text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+            }
         }
 
         .header p {
-            font-size: 1rem;
+            font-size: 1.1rem;
             opacity: 0.9;
+            margin-bottom: 25px;
+            z-index: 3;
+            position: relative;
         }
 
         .refresh-btn {
             background: white;
             color: #4a90e2;
             border-radius: 5px;
-            padding: 8px 20px;
+            padding: 10px 25px;
             border: none;
-            font-size: 0.9rem;
+            font-size: 1rem;
             cursor: pointer;
             margin-top: 20px;
             transition: all 0.3s ease;
+            z-index: 3;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         .refresh-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
         }
 
+        /* 动画定义 */
+        @keyframes float {
+            0% {
+                transform: translate(-10px, -10px) rotate(0deg);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.8;
+            }
+            80% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translate(calc(100% + 10px), calc(100% + 10px)) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes particle-move {
+            0% {
+                transform: translate(0, 0) scale(0.5);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translate(calc(var(--tx)), calc(var(--ty))) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        @keyframes glow-move {
+            0% {
+                transform: translateX(-100%) translateY(-100%);
+            }
+            100% {
+                transform: translateX(100%) translateY(100%);
+            }
+        }
+
+        /* 统计卡片样式 */
         .stats-container {
             display: flex;
             gap: 20px;
-            margin-top: 20px;
+            margin-top: 30px;
         }
 
         .stat-card {
@@ -96,6 +225,7 @@
             color: #666;
         }
 
+        /* 结果部分样式 */
         .results-section {
             background: white;
             border-radius: 10px;
@@ -143,12 +273,6 @@
             text-align: center;
             padding: 50px 20px;
             color: #666;
-        }
-
-        .empty-state i {
-            font-size: 50px;
-            color: #f39c12;
-            margin-bottom: 20px;
         }
 
         footer {
@@ -315,6 +439,18 @@
     <div class="container">
         <!-- Header Section -->
         <div class="header">
+            <!-- 网格背景 -->
+            <div class="grid-background"></div>
+            
+            <!-- 六边形图案 -->
+            <div class="hexagon-pattern" id="hexagon-pattern"></div>
+            
+            <!-- 发光线条 -->
+            <div class="glow-lines" id="glow-lines"></div>
+            
+            <!-- 粒子效果 -->
+            <div class="particles" id="particles"></div>
+            
             <h1>PrivHunterAI <small>v1.0.0</small></h1>
             <p>高级智能 API 安全扫描工具。</p>
             <button class="refresh-btn" onclick="fetchData()">刷新数据</button>
@@ -566,6 +702,51 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             fetchData();
+            
+            // 创建粒子效果
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                
+                // 随机设置粒子运动轨迹
+                const tx = (Math.random() - 0.5) * 200;
+                const ty = (Math.random() - 0.5) * 200;
+                particle.style.setProperty('--tx', `${tx}px`);
+                particle.style.setProperty('--ty', `${ty}px`);
+                
+                // 随机动画延迟
+                particle.style.animationDelay = `${Math.random() * 15}s`;
+                particle.style.animationDuration = `${15 + Math.random() * 10}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+            
+            // 创建六边形图案
+            const hexagonPattern = document.getElementById('hexagon-pattern');
+            for (let i = 0; i < 15; i++) {
+                const hexagon = document.createElement('div');
+                hexagon.classList.add('hexagon');
+                hexagon.style.left = `${Math.random() * 100}%`;
+                hexagon.style.top = `${Math.random() * 100}%`;
+                hexagon.style.animationDelay = `${Math.random() * 5}s`;
+                hexagonPattern.appendChild(hexagon);
+            }
+            
+            // 创建发光线条
+            const glowLinesContainer = document.getElementById('glow-lines');
+            for (let i = 0; i < 8; i++) {
+                const line = document.createElement('div');
+                line.classList.add('glow-line');
+                line.style.width = `${30 + Math.random() * 70}%`;
+                line.style.left = `${Math.random() * 70}%`;
+                line.style.top = `${Math.random() * 70}%`;
+                line.style.transform = `rotate(${Math.random() * 360}deg)`;
+                line.style.animationDelay = `${Math.random() * 5}s`;
+                glowLinesContainer.appendChild(line);
+            }
         });
     </script>
 </body>
