@@ -88,11 +88,12 @@ func AIScan(model, aiurl, apikey, reqA, respA, respB, statusB string) (string, e
 		"statusB":   statusB,
 	}
 
-	inputJSON, err := json.Marshal(input)
+	inputBytes, err := json.MarshalIndent(input, "", "  ")
 	if err != nil {
 		fmt.Printf("Error marshaling input: %v\n", err)
 		return "", err
 	}
+	fmt.Println(string(inputBytes))
 	request := ChatCompletionRequest{
 		Model: model, // 根据实际模型名称修改
 		Messages: []Message{
@@ -102,11 +103,11 @@ func AIScan(model, aiurl, apikey, reqA, respA, respB, statusB string) (string, e
 			},
 			{
 				Role:    "user",
-				Content: string(inputJSON),
+				Content: string(inputBytes),
 			},
 		},
-		Temperature: 0.5,
-		MaxTokens:   1000,
+		Temperature: 0.2,
+		MaxTokens:   2500,
 	}
 
 	response, err := CreateChatCompletion(request, aiurl, apikey)
