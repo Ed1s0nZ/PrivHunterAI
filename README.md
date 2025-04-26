@@ -2,7 +2,7 @@
 一款通过被动代理方式，利用主流 AI（如 Kimi、DeepSeek、GPT 等）检测越权漏洞的工具。其核心检测功能依托相关 AI 引擎的开放 API 构建，支持 HTTPS 协议的数据传输与交互。
 
 ## 工作流程
-<img src="https://github.com/Ed1s0nZ/PrivHunterAI/blob/main/img/%E6%B5%81%E7%A8%8B%E5%9B%BE.png" width="800px">  
+<img src="./img/%E6%B5%81%E7%A8%8B%E5%9B%BE.png" width="800px" />
 
 ## Prompt
 ```json
@@ -132,10 +132,10 @@
 持续优化中，目前输出效果如下：
 
 1. 终端输出：
-<img src="https://github.com/Ed1s0nZ/PrivHunterAI/blob/main/img/%E6%95%88%E6%9E%9C.png" width="800px">  
+<img src="./img/%E6%95%88%E6%9E%9C.png" width="800px" />
 
 2. 前端输出（访问127.0.0.1:8222）：
-<img src="https://github.com/Ed1s0nZ/PrivHunterAI/blob/main/img/%E5%89%8D%E7%AB%AF%E7%BB%93%E6%9E%9C.png" width="800px">
+<img src="./img/%E5%89%8D%E7%AB%AF%E7%BB%93%E6%9E%9C.png" width="800px" />
 
 ## 后续计划
 1. 添加敏感信息的扫描，例如通过正则匹配+AI辅助识别的方式扫描js文件中泄露的秘钥；
