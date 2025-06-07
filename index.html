@@ -269,6 +269,22 @@
             box-shadow: 0 4px 8px rgba(74, 144, 226, 0.3);
         }
 
+        .export-btn {
+            background: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 20px;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: all 0.3s ease;
+        }
+        .export-btn:hover {
+            background: #27ae60;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(46, 204, 113, 0.3);
+        }
+
         .empty-state {
             text-align: center;
             padding: 50px 20px;
@@ -488,6 +504,7 @@
                         <option value="false">安全请求</option>
                     </select>
                     <button class="filter-btn" onclick="filterData()">筛选</button>
+                    <button class="export-btn" onclick="exportToExcel()">导出Excel</button>
                 </div>
             </div>
 
@@ -699,6 +716,50 @@
             itemsPerPage = parseInt(this.value);
             fetchData(1, itemsPerPage, document.getElementById('filter-result').value);
         });
+
+        // 导出Excel功能
+        async function exportToExcel() {
+            try {
+                document.body.style.cursor = 'wait';
+                
+                // 获取当前筛选条件
+                const resultFilter = document.getElementById('filter-result').value;
+                
+                // 调用后端导出接口
+                const response = await fetch(`/export?result=${resultFilter}`);
+                
+                if (!response.ok) {
+                    throw new Error('导出失败');
+                }
+                
+                // 将响应转换为blob
+                const blob = await response.blob();
+                
+                // 创建一个临时下载链接
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                
+                // 设置文件名
+                const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+                const filename = `PrivHunterAI-扫描结果-${timestamp}.xlsx`;
+                a.download = filename;
+                
+                // 触发下载
+                document.body.appendChild(a);
+                a.click();
+                
+                // 清理
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+                
+            } catch (error) {
+                alert('导出失败: ' + error.message);
+            } finally {
+                document.body.style.cursor = 'default';
+            }
+        }
 
         document.addEventListener('DOMContentLoaded', () => {
             fetchData();
