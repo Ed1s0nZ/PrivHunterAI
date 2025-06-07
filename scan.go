@@ -1,6 +1,8 @@
 package main
 
 import (
+	"bytes"
+	"compress/gzip"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -142,6 +144,11 @@ func sendHTTPAndKimi(r *RequestResponseLog) (result, reqA, reqB, respA, respB st
 	req1 := string(jsonDataReq)
 
 	resp1 := string(r.Response.Body)
+	// 检查并解压gzip响应
+	decompressedBody := Gzipped(r.Response.Body)
+	if isGzipped(r.Response.Body) {
+		resp1 = string(decompressedBody)
+	}
 
 	fullURL := &url.URL{
 		Scheme:   r.Request.URL.Scheme,
@@ -196,6 +203,11 @@ func sendHTTPAndKimi(r *RequestResponseLog) (result, reqA, reqB, respA, respB st
 		}
 		// 将响应体转换为字符串
 		resp2 := string(bodyBytes)
+		// 检查并解压gzip响应
+		decompressedBody2 := Gzipped(bodyBytes)
+		if isGzipped(bodyBytes) {
+			resp2 = string(decompressedBody2)
+		}
 
 		if len(resp1+resp2) < 1048576 {
 			if !MatchString(config.GetConfig().RespBodyBWhiteList, resp2) {
@@ -281,4 +293,24 @@ func detectPrivilegeEscalation(AI string, reqA, resp1, resp2, statusB string) (s
 		return "", err
 	}
 	return result, nil
+}
+
+// 检查数据是否为gzip压缩格式
+func isGzipped(data []byte) bool {
+	return len(data) >= 2 && data[0] == 0x1F && data[1] == 0x8B
+}
+
+// 如果数据是gzip压缩的，进行解压
+func Gzipped(body []byte) []byte {
+	fmt.Printf("解压前的数据: %s\n", body)
+	if isGzipped(body) {
+		gzReader, err := gzip.NewReader(bytes.NewReader(body))
+		if err != nil {
+			panic(err)
+		}
+		defer gzReader.Close()
+		body, _ = io.ReadAll(gzReader)
+		fmt.Printf("解压后的数据: %s\n", body)
+	}
+	return body
 }
