@@ -234,17 +234,17 @@ func sendHTTPAndKimi(r *RequestResponseLog) (result, reqA, reqB, respA, respB st
 
 					return resultDetect, req1, req2, resp1, resp2, nil
 				} else {
-					return `{"res": "false", "reason": "相似度小于0.5(` + fmt.Sprint(similarity) + `)，判断为未越权（未消耗AI tokens）","confidence":"100%"}`, req1, req2, resp1, resp2, nil
+					return `{"res": "false", "reason": "相似度小于0.5(` + fmt.Sprint(similarity) + `)，判断为未越权（未消耗AI tokens）", "confidence":"100%"}`, req1, req2, resp1, resp2, nil
 				}
 			} else {
-				return `{"res": "false", "reason": "匹配到关键字，判断为无越权（未消耗AI tokens）","confidence":"100%"}`, req1, req2, resp1, resp2, nil
+				return `{"res": "false", "reason": "匹配到关键字，判断为无越权（未消耗AI tokens）", "confidence":"100%"}`, req1, req2, resp1, resp2, nil
 			}
 		} else {
-			return `{"res": "white", "reason": "请求包太大","confidence":"100%"}`, req1, req2, resp1, resp2, nil
+			return `{"res": "white", "reason": "请求包太大", "confidence":"100%"}`, req1, req2, resp1, resp2, nil
 		}
 
 	}
-	return `{"res": "white", "reason": "白名单后缀或白名单Content-Type接口","confidence":"100%"}`, req1, "", resp1, "", nil
+	return `{"res": "white", "reason": "白名单后缀或白名单Content-Type接口", "confidence":"100%"}`, req1, "", resp1, "", nil
 }
 
 func detectPrivilegeEscalation(AI string, reqA, resp1, resp2, statusB string) (string, error) {
@@ -261,12 +261,12 @@ func detectPrivilegeEscalation(AI string, reqA, resp1, resp2, statusB string) (s
 		model := "deepseek-chat"
 		aiurl := "https://api.deepseek.com/v1/chat/completions"
 		apikey := config.GetConfig().APIKeys.DeepSeek
-		result, err = aiapis.AIScan(model, aiurl, apikey, reqA, resp1, resp2, statusB) // 调用 kimi 检测是否越权
+		result, err = aiapis.AIScan(model, aiurl, apikey, reqA, resp1, resp2, statusB) // 调用 deepseek 检测是否越权
 	case "qianwen":
 		model := "qwen-plus"
 		aiurl := "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"
 		apikey := config.GetConfig().APIKeys.Qianwen
-		result, err = aiapis.AIScan(model, aiurl, apikey, reqA, resp1, resp2, statusB) // 调用 kimi 检测是否越权
+		result, err = aiapis.AIScan(model, aiurl, apikey, reqA, resp1, resp2, statusB) // 调用 qianwen 检测是否越权
 	case "hunyuan":
 		model := "hunyuan-turbo"
 		aiurl := "https://api.hunyuan.cloud.tencent.com/v1/chat/completions"
@@ -276,17 +276,17 @@ func detectPrivilegeEscalation(AI string, reqA, resp1, resp2, statusB string) (s
 		model := "glm-4-air"
 		aiurl := "https://open.bigmodel.cn/api/paas/v4/chat/completions"
 		apikey := config.GetConfig().APIKeys.Glm
-		result, err = aiapis.AIScan(model, aiurl, apikey, reqA, resp1, resp2, statusB) // 调用 hunyuan 检测是否越权
+		result, err = aiapis.AIScan(model, aiurl, apikey, reqA, resp1, resp2, statusB) // 调用 glm 检测是否越权
 	case "gpt":
 		model := "gpt-4o"
 		aiurl := "https://open.bigmodel.cn/api/paas/v4/chat/completions"
 		apikey := config.GetConfig().APIKeys.Gpt
-		result, err = aiapis.AIScan(model, aiurl, apikey, reqA, resp1, resp2, statusB) // 调用 hunyuan 检测是否越权
+		result, err = aiapis.AIScan(model, aiurl, apikey, reqA, resp1, resp2, statusB) // 调用 gpt 检测是否越权
 	default:
 		model := "moonshot-v1-8k"
 		aiurl := "https://api.moonshot.cn/v1/chat/completions"
 		apikey := config.GetConfig().APIKeys.Kimi
-		result, err = aiapis.AIScan(model, aiurl, apikey, reqA, resp1, resp2, statusB) // 调用 kimi 检测是否越权
+		result, err = aiapis.AIScan(model, aiurl, apikey, reqA, resp1, resp2, statusB) // 默认调用 kimi 检测是否越权
 	}
 
 	if err != nil {
