@@ -1,0 +1,83 @@
+.evidence-tabs {
+  display: flex;
+  gap: 7px;
+  border-bottom: 1px solid #e6e9f2;
+  margin: 20px 0;
+  padding-bottom: 12px;
+  flex-wrap: wrap;
+}
+.evidence-tabs button {
+  border: 0;
+  background: transparent;
+  font-size: 12px;
+  color: #8b95a8;
+}
+.evidence-tabs button[aria-selected="true"] {
+  background: #efedff;
+  color: #6259df;
+}
+.comparison .section-heading {
+  margin-bottom: 8px;
+}
+.comparison .section-heading button {
+  padding: 5px 8px;
+  font-size: 10px;
+}
+.field-diff {
+  background: #fafbfe;
+  border-radius: 8px;
+  padding: 16px;
+}
+.field-diff td {
+  max-width: 300px;
+  word-break: break-all;
+}
+.bulk-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: #f1effb;
+  border-radius: 8px;
+  margin: 16px 0;
+  font-size: 12px;
+  flex-wrap: wrap;
+}
+.bulk-toolbar select {
+  padding: 8px;
+}
+.filter-reset {
+  border: 0;
+  color: #7e73bf;
+  font-size: 11px;
+  margin-bottom: 14px;
+  padding: 6px 0;
+  background: transparent;
+}
+td > input[type="checkbox"] {
+  margin-right: 12px;
+  accent-color: #6259df;
+}
+th > input[type="checkbox"] {
+  accent-color: #6259df;
+  margin-right: 12px;
+}
+dialog.native-modal {
+  border: 1px solid #e7ebf2;
+  max-height: 90dvh;
+  max-width: calc(100vw - 32px);
+  box-shadow: 0 24px 80px #171d3540;
+}
+dialog.native-modal::backdrop {
+  background: #161d3655;
+  backdrop-filter: blur(3px);
+}
+dialog.native-modal .form-grid {
+  max-width: none;
+}
+.audit-code {
+  display: block;
+  font-size: 9px;
+  color: #a2a8b8;
+  margin-top: 5px;
+}

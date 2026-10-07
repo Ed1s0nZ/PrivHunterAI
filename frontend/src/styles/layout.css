@@ -1,0 +1,164 @@
+.shell {
+  display: flex;
+  min-height: 100vh;
+}
+aside {
+  width: 238px;
+  background: #fff;
+  border-right: 1px solid #e7ebf2;
+  display: flex;
+  flex-direction: column;
+  padding: 30px 18px;
+  position: fixed;
+  inset: 0 auto 0 0;
+}
+.brand {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  font-weight: 700;
+  font-size: 18px;
+  padding: 0 10px 44px;
+}
+.brand b {
+  background: #6259df;
+  color: white;
+  border-radius: 10px;
+  padding: 12px 8px;
+  font-size: 16px;
+}
+.brand span {
+  display: block;
+  font-size: 10px;
+  color: #8b95a8;
+  margin-top: 6px;
+  font-weight: 400;
+}
+.nav-label {
+  font-size: 10px;
+  color: #9ba5b6;
+  letter-spacing: 1.4px;
+  margin: 0 14px 12px;
+}
+nav {
+  display: grid;
+  gap: 6px;
+}
+nav button {
+  border: 0;
+  text-align: left;
+  padding: 13px 16px;
+  color: #778299;
+  background: transparent;
+}
+nav button span {
+  display: inline-block;
+  width: 28px;
+}
+nav button.active {
+  background: #efedff;
+  color: #6259df;
+  font-weight: 600;
+}
+.sidebar-footer {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  padding-top: 20px;
+  border-top: 1px solid #eef0f5;
+}
+.sidebar-footer small {
+  display: block;
+  margin-top: 5px;
+}
+.sidebar-footer button {
+  margin-left: auto;
+  border: 0;
+  padding: 8px;
+}
+.avatar {
+  background: #e8e7f8;
+  color: #6259df;
+  padding: 12px;
+  border-radius: 9px;
+}
+main {
+  margin-left: 238px;
+  width: calc(100% - 238px);
+}
+header {
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border-bottom: 1px solid #e7ebf2;
+  padding: 0 38px;
+  font-size: 12px;
+  color: #8b95a8;
+}
+.local-badge {
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: #559680;
+}
+.content {
+  padding: 38px;
+  max-width: 1600px;
+}
+@media (max-width: 760px) {
+  .login {
+    padding: 24px 16px;
+  }
+  .login-surface {
+    grid-template-columns: 1fr;
+    max-width: 460px;
+  }
+  .login-story {
+    display: none;
+  }
+  .login-card {
+    padding: 36px 28px;
+    margin: 0;
+    border-left: 0;
+  }
+  aside {
+    width: 76px;
+    padding: 20px 8px;
+  }
+  .brand {
+    padding: 0 4px 30px;
+  }
+  .brand > div,
+  .nav-label,
+  .sidebar-footer > div,
+  .sidebar-footer small {
+    display: none;
+  }
+  nav button {
+    font-size: 0;
+    padding: 14px;
+  }
+  nav button span {
+    font-size: 20px;
+    width: auto;
+  }
+  .sidebar-footer button {
+    margin: auto;
+  }
+  main {
+    margin-left: 76px;
+    width: calc(100% - 76px);
+  }
+  header {
+    padding: 0 18px;
+  }
+  .local-badge {
+    display: none;
+  }
+  .content {
+    padding: 24px 18px;
+  }
+}

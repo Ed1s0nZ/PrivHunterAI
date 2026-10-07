@@ -1,0 +1,117 @@
+@media (min-width: 1600px) {
+  .configuration-form {
+    grid-template-columns: minmax(0, 1fr) 310px;
+  }
+  .config-card {
+    padding: 30px;
+  }
+}
+@media (max-width: 1050px) {
+  .configuration-form {
+    grid-template-columns: 1fr;
+  }
+  .configuration-rail {
+    grid-template-columns: 1fr 1fr;
+  }
+  .member-summary {
+    gap: 28px;
+  }
+  .member-summary p {
+    display: none;
+  }
+}
+@media (max-width: 650px) {
+  .config-card {
+    padding: 18px;
+  }
+  .config-field-grid {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+  .configuration-rail {
+    grid-template-columns: 1fr;
+  }
+  .runtime-metrics {
+    gap: 8px;
+  }
+  .runtime-metrics > div {
+    padding: 12px;
+  }
+  .config-card-heading {
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .config-card-heading h2 {
+    font-size: 14px;
+  }
+  .config-card-heading > .badge {
+    margin-left: 48px;
+  }
+  .member-summary {
+    padding: 18px;
+    gap: 30px;
+  }
+  .member-panel {
+    padding: 16px;
+  }
+  .member-panel .toolbar small {
+    display: none;
+  }
+  .configuration-savebar {
+    bottom: 8px;
+    padding: 12px;
+  }
+  .config-card-heading .count-pill {
+    margin-left: auto;
+  }
+}
+.config-reload {
+  margin: 0;
+  align-items: center;
+}
+.config-reload button {
+  font-size: 11px;
+  padding: 9px 13px;
+  background: #fff9;
+  border-color: #e1e5ee;
+  color: #7f889f;
+}
+.config-card-heading > div {
+  flex: 1;
+  min-width: 0;
+}
+.configuration-form {
+  padding-bottom: 20px;
+}
+@media (max-width: 650px) {
+  .config-card-heading {
+    flex-wrap: nowrap;
+  }
+  .config-card-heading > .badge,
+  .config-card-heading > .count-pill {
+    display: none;
+  }
+  .config-icon {
+    width: 30px;
+    height: 30px;
+    font-size: 17px;
+  }
+  .runtime-metrics span {
+    font-size: 9px;
+    white-space: nowrap;
+  }
+  .runtime-metrics > div {
+    padding: 10px 7px;
+  }
+  .config-row .subtle-button {
+    font-size: 9px;
+    padding: 6px;
+  }
+  .config-reload button {
+    font-size: 9px;
+    padding: 8px;
+  }
+  .page-heading:has(.config-reload) {
+    gap: 12px;
+  }
+}

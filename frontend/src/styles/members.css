@@ -1,0 +1,117 @@
+.member-summary {
+  display: flex;
+  align-items: center;
+  gap: 50px;
+  margin-bottom: 24px;
+  padding: 20px 28px;
+  border: 1px solid #e5e8f1;
+  background: linear-gradient(110deg, #f0eefb, #f8f9fc);
+  border-radius: 12px;
+}
+.member-summary > div {
+  display: grid;
+  gap: 10px;
+}
+.member-summary span {
+  font-size: 10px;
+  color: #9296ac;
+}
+.member-summary b {
+  font-size: 24px;
+  font-weight: 500;
+}
+.member-summary p {
+  margin: 0 0 0 auto;
+  font-size: 11px;
+  color: #9296ac;
+}
+.member-panel {
+  padding: 26px;
+}
+.member-panel .toolbar input {
+  max-width: 350px;
+  font-size: 12px;
+}
+.member-panel .toolbar {
+  align-items: center;
+  justify-content: space-between;
+}
+.member-panel .toolbar small {
+  font-size: 10px;
+}
+.member-panel table th {
+  background: #f8f9fc;
+  font-size: 11px;
+}
+.member-panel table td {
+  padding: 18px 12px;
+}
+.member-identity {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.member-avatar {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  background: #edeaf8;
+  color: #9382bd;
+  font-size: 12px;
+}
+.member-identity b {
+  font-size: 12px;
+  font-weight: 500;
+}
+.member-identity small {
+  display: block;
+  font-size: 9px;
+  margin-top: 5px;
+}
+.member-panel select {
+  padding: 8px 10px;
+  font-size: 11px;
+  background: #fbfcfe;
+  border-color: #e9ecf3;
+}
+.member-panel td > button {
+  font-size: 11px;
+  padding: 7px 12px;
+  color: #8b94a9;
+}
+.permission-note {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 0 6px;
+  color: #a0a8bb;
+}
+.permission-note p {
+  font-size: 10px;
+  line-height: 1.8;
+  margin: 0;
+}
+.native-modal:has(.member-create) {
+  width: min(480px, calc(100vw - 32px));
+}
+.member-create {
+  gap: 22px;
+}
+.member-create .section-heading {
+  margin: 0;
+}
+.member-create label {
+  display: grid;
+  gap: 10px;
+  font-size: 12px;
+}
+.member-create input,
+.member-create select {
+  font-size: 12px;
+}
+.member-create .primary {
+  margin-top: 8px;
+  width: 100%;
+}

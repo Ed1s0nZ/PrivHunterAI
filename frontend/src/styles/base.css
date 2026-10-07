@@ -1,0 +1,78 @@
+:root {
+  font-family: Inter, "PingFang SC", "Microsoft YaHei", sans-serif;
+  color: #24314a;
+  background: #f4f6fa;
+  font-synthesis: none;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+button {
+  cursor: pointer;
+  border: 1px solid #dce2eb;
+  border-radius: 8px;
+  background: white;
+  padding: 10px 16px;
+  color: inherit;
+}
+button:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+input,
+textarea,
+select {
+  padding: 12px;
+  border: 1px solid #dce2eb;
+  border-radius: 7px;
+  background: #fff;
+  color: inherit;
+}
+input:focus,
+button:focus-visible {
+  outline: 2px solid #6c72ed;
+  outline-offset: 2px;
+}
+.primary {
+  background: #6259df;
+  color: white;
+  border-color: #6259df;
+}
+.eyebrow {
+  font-size: 11px;
+  letter-spacing: 2px;
+  font-weight: 700;
+  color: #7a8398;
+}
+h1 {
+  font-size: 32px;
+  letter-spacing: -1px;
+}
+p {
+  color: #778299;
+  line-height: 1.8;
+}
+small {
+  font-size: 12px;
+  color: #8390a5;
+}
+.error {
+  color: #b33c4e;
+  background: #fff0f1;
+  padding: 10px;
+  border-radius: 6px;
+}
+.loading {
+  min-height: 100vh;
+  display: grid;
+  place-content: center;
+}
